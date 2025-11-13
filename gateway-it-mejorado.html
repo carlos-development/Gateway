@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateway IT - Soluciones TecnolÃ³gicas Eficientes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #F58635;
+            --light-bg: #ffffff;
+            --light-secondary: #f8f9fa;
+            --light-card: #ffffff;
+            --dark-bg: #1a1a2e;
+            --dark-secondary: #16213e;
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            --text-light: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #F58635 0%, #ff6b35 100%);
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ============================================
+           MODO OSCURO - Variables alternativas
+           ============================================ */
+        body.dark-mode {
+            --light-bg: #0f0f1e;
+            --light-secondary: #1a1a2e;
+            --light-card: #16213e;
+            --text-dark: #e0e0e0;
+            --text-gray: #b0b0b0;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode {
+            background-color: #0f0f1e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .hero {
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+                url('background-hero.jpg') center/cover no-repeat fixed;
+        }
+
+        body.dark-mode nav {
+            background: transparent;
+        }
+
+        body.dark-mode nav.scrolled {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        body.dark-mode .nav-links a {
+            color: #ffffff;
+        }
+
+        body.dark-mode nav.scrolled .nav-links a {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .service-tab {
+            background: var(--light-card);
+            border-color: rgba(245, 134, 53, 0.3);
+        }
+
+        body.dark-mode .filter-btn {
+            background: var(--light-card);
+            border-color: rgba(245, 134, 53, 0.3);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .footer {
+            background: #0a0a14;
+        }
+
+        body.dark-mode .section-title,
+        body.dark-mode .section-subtitle {
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .hero-content h1 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .hero-content p {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .service-card,
+        body.dark-mode .product-card,
+        body.dark-mode .value-card {
+            background: var(--light-card);
+            border-color: rgba(245, 134, 53, 0.3);
+        }
+
+        body.dark-mode .contact-form,
+        body.dark-mode .contact-item {
+            background: var(--light-card);
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group textarea {
+            background: var(--light-secondary);
+            color: var(--text-dark);
+            border-color: rgba(245, 134, 53, 0.3);
+        }
+
+        body.dark-mode .cart-sidebar {
+            background: var(--light-secondary);
+        }
+
+        body.dark-mode .cart-item {
+            border-bottom-color: rgba(245, 134, 53, 0.2);
+        }
+
+        body.dark-mode .cart-footer {
+            background: var(--light-card);
+        }
+
+        body.dark-mode .social-link {
+            background: var(--light-card);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Fondo animado con partÃ­culas */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(245, 134, 53, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 20% 50%, rgba(245, 134, 53, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 134, 53, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* NavegaciÃ³n */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: transparent;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        nav.scrolled {
+            padding: 0.8rem 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(245, 134, 53, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            transition: filter 0.3s;
+        }
+
+        nav.scrolled .logo img {
+            filter: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        nav.scrolled .nav-links a {
+            color: var(--text-dark);
+            text-shadow: none;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #ffffff;
+            transition: 0.3s;
+        }
+
+        nav.scrolled .menu-toggle span {
+            background: var(--primary-color);
+        }
+
+        /* ============================================
+           CARRITO DE COMPRAS
+           ============================================ */
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        nav.scrolled .cart-icon {
+            color: var(--primary-color);
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background: var(--light-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-price {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .qty-btn {
+            width: 25px;
+            height: 25px;
+            border: 1px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .qty-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .cart-item-remove {
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .cart-item-remove:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 2px solid var(--primary-color);
+            background: var(--light-secondary);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .cart-total-amount {
+            color: var(--primary-color);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 134, 53, 0.4);
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-gray);
+        }
+
+        .cart-empty i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+        }
+
+        .cart-overlay.active {
+            display: block;
+        }
+
+        /* ============================================
+           ANIMACIONES DE SCROLL
+           ============================================ */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scroll-reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+                /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+                url('images/background-hero.jpg') center/cover no-repeat fixed;
+            filter: blur(3px);
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(245, 134, 53, 0.2) 0%, transparent 70%);
+            top: -300px;
+            right: -300px;
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 134, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(245, 134, 53, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .hero-image {
+            position: relative;
+            animation: fadeInRight 1s ease;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-metrics {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .metric-item {
+            text-align: center;
+            color: white;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            min-width: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .metric-item h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-item p {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* SecciÃ³n Sobre Nosotros */
+        .about {
+            padding: 8rem 2rem;
+            background: var(--light-secondary);
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 134, 53, 0.05) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 4rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        .about-text strong {
+            color: var(--primary-color);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: var(--light-card);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            box-shadow: var(--shadow-card);
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 40px rgba(245, 134, 53, 0.15);
+        }
+
+        .value-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            color: var(--text-gray);
+        }
+
+        /* SecciÃ³n Servicios */
+        .services {
+            padding: 8rem 2rem;
+            background: var(--light-bg);
+        }
+
+        /* Tabs de Servicios */
+        .service-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .service-tab {
+            padding: 1.5rem 2.5rem;
+            background: white;
+            border: 2px solid rgba(245, 134, 53, 0.2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 200px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .service-tab:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(245, 134, 53, 0.2);
+        }
+
+        .service-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(245, 134, 53, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .service-tab i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .service-tab.active i {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .service-tab span {
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            color: var(--text-dark);
+            transition: color 0.3s;
+        }
+
+        .service-tab.active span {
+            color: white;
+        }
+
+        /* Contenedor de CategorÃ­as */
+        .service-categories-container {
+            position: relative;
+            min-height: 600px;
+        }
+
+        .service-category-content {
+            display: none;
+            opacity: 0;
+            animation: fadeInContent 0.5s ease forwards;
+        }
+
+        .service-category-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--light-card);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            cursor: pointer;
+            box-shadow: var(--shadow-card);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(245, 134, 53, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(245, 134, 53, 0.03) 0%, transparent 100%);
+        }
+
+        .service-content {
+            padding: 2rem;
+        }
+
+        .service-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .service-content p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .service-link:hover {
+            gap: 1rem;
+        }
+
+        /* SecciÃ³n E-commerce */
+        .ecommerce {
+            padding: 8rem 2rem;
+            background: var(--light-secondary);
+        }
+
+        /* Filtros de CategorÃ­as */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid rgba(245, 134, 53, 0.2);
+            border-radius: 50px;
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(245, 134, 53, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(245, 134, 53, 0.3);
+        }
+
+        .filter-btn i {
+            font-size: 1.1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: var(--light-card);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            box-shadow: var(--shadow-card);
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(245, 134, 53, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+
+        .product-content {
+            padding: 1.2rem;
+        }
+
+        .product-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin: 0.8rem 0;
+        }
+
+        .product-content p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.7rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 134, 53, 0.4);
+        }
+
+        /* SecciÃ³n Clientes */
+        .clients {
+            padding: 8rem 2rem;
+            background: var(--light-bg);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .brands-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 4rem 0 2rem;
+        }
+
+        .clients-quote {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin: 2rem auto 4rem;
+            max-width: 800px;
+            font-style: italic;
+        }
+
+        /* Carrusel Infinito */
+        .logos-carousel-wrapper {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .logos-carousel {
+            position: relative;
+            width: 100%;
+        }
+
+        .logos-track {
+            display: flex;
+            width: fit-content;
+            animation: scroll-left 30s linear infinite;
+        }
+
+        .logos-track-reverse {
+            animation: scroll-right 30s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes scroll-right {
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .carousel-image {
+            height: 120px;
+            width: auto;
+            margin: 0 2rem;
+            object-fit: contain;
+        }
+
+        /* Pausar animaciÃ³n al hover */
+        .logos-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* SecciÃ³n Contacto */
+        .contact {
+            padding: 8rem 2rem;
+            background: var(--light-secondary);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--light-card);
+            border-radius: 15px;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            transition: all 0.3s;
+            box-shadow: var(--shadow-card);
+        }
+
+        .contact-item:hover {
+            border-color: var(--primary-color);
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(245, 134, 53, 0.15);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            min-width: 40px;
+        }
+
+        .contact-item-content h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item-content p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: var(--light-card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            box-shadow: var(--shadow-card);
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(245, 134, 53, 0.3);
+        }
+
+        .contact-form {
+            background: var(--light-card);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 134, 53, 0.15);
+            box-shadow: var(--shadow-card);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--light-secondary);
+            border: 1px solid rgba(245, 134, 53, 0.2);
+            border-radius: 10px;
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(245, 134, 53, 0.1);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 134, 53, 0.4);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--dark-bg);
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(245, 134, 53, 0.2);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-section p {
+            color: #b0b0b0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 134, 53, 0.2);
+            color: #b0b0b0;
+        }
+
+        .footer-tagline {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Modo Oscuro Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(245, 134, 53, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+            border: none;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(245, 134, 53, 0.6);
+        }
+
+        .dark-mode-toggle i {
+            font-size: 1.5rem;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .dark-mode-toggle i {
+            transform: rotate(180deg);
+        }
+
+        /* ============================================
+           RESPONSIVE - TABLETS (768px - 968px)
+           ============================================ */
+        @media (max-width: 968px) {
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links a {
+                color: var(--text-dark) !important;
+                text-shadow: none !important;
+            }
+
+            .cart-icon {
+                color: var(--primary-color) !important;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-container,
+            .about-content,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid,
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Carrito en mÃ³vil */
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .cart-sidebar.active {
+                right: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+            }
+
+            .cart-item-details {
+                width: 100%;
+            }
+
+            .category-filters {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .service-tabs {
+                gap: 1rem;
+            }
+
+            .service-tab {
+                min-width: 150px;
+                padding: 1.2rem 1.5rem;
+            }
+
+            .service-tab i {
+                font-size: 2rem;
+            }
+
+            .service-tab span {
+                font-size: 0.9rem;
+            }
+
+            .carousel-image {
+                height: 80px;
+                margin: 0 1rem;
+            }
+
+            .brands-title {
+                font-size: 1.5rem;
+            }
+
+            .clients-quote {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NavegaciÃ³n -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="images/Logo_Gateway.png" alt="Gateway IT" style="height: 50px;">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#tienda">Tienda</a></li>
+                <li><a href="#clientes">Clientes</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li>
+                    <div class="cart-icon" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-container" style="grid-template-columns: 1fr; text-align: center;">
+            <div class="hero-content">
+                <h1>Soluciones TecnolÃ³gicas Eficientes</h1>
+                <p>Gateway IT, la tecnologÃ­a como facilitador para el crecimiento de su empresa.</p>
+                
+                <div class="hero-metrics">
+                    <div class="metric-item">
+                        <h3 data-target="100">0%</h3>
+                        <p>Seguridad</p>
+                    </div>
+                    <div class="metric-item">
+                        <h3 data-target="15">0+</h3>
+                        <p>AÃ±os</p>
+                    </div>
+                    <div class="metric-item">
+                        <h3>24/7</h3>
+                        <p>Soporte</p>
+                    </div>
+                </div>
+
+                <div class="hero-buttons" style="justify-content: center; margin-top: 1.5rem;">
+                    <a href="#servicios" class="btn btn-primary">Conozca nuestros servicios</a>
+                    <a href="#tienda" class="btn btn-secondary">Adquiera productos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section class="about" id="nosotros">
+        <div class="section-container">
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <p class="section-subtitle">Comprometidos con la excelencia tecnolÃ³gica</p>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        <strong>Gateway IT</strong> estÃ¡ comprometido en entregar soluciones que se adapten a su empresa. Trabajamos con marcas reconocidas a nivel mundial, garantizando servicios seguros, confiables e innovadores respaldados por personal altamente calificado.
+                    </p>
+                    <p style="margin-top: 1.5rem;">
+                        Nos convertimos en el brazo tecnolÃ³gico de nuestros clientes para que se enfoquen en su negocio principal, proporcionando soporte integral en todas las Ã¡reas de tecnologÃ­a de la informaciÃ³n.
+                    </p>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600" alt="Equipo trabajando" style="width: 100%; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                </div>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Seguridad</h3>
+                    <p>Implementamos las mejores prÃ¡cticas de seguridad para proteger su informaciÃ³n y sistemas.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-certificate"></i>
+                    <h3>GarantÃ­a</h3>
+                    <p>Respaldamos nuestros servicios con garantÃ­a y soporte continuo de calidad.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>InnovaciÃ³n</h3>
+                    <p>Adoptamos tecnologÃ­as de vanguardia para mantener su empresa competitiva.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="services" id="servicios">
+        <div class="section-container">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Soluciones integrales para todas sus necesidades tecnolÃ³gicas</p>
+
+            <!-- Tabs de CategorÃ­as -->
+            <div class="service-tabs">
+                <button class="service-tab active" onclick="showServiceCategory('mantenimiento')">
+                    <i class="fas fa-tools"></i>
+                    <span>Mantenimiento y Soporte</span>
+                </button>
+                <button class="service-tab" onclick="showServiceCategory('redes')">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Redes e Infraestructura</span>
+                </button>
+                <button class="service-tab" onclick="showServiceCategory('seguridad')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Seguridad y Desarrollo</span>
+                </button>
+            </div>
+
+            <!-- Contenido de CategorÃ­as -->
+            <div class="service-categories-container">
+                <!-- CATEGORÃA: MANTENIMIENTO Y SOPORTE -->
+                <div class="service-category-content active" id="mantenimiento">
+                    <div class="services-grid">
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Mantenimiento y Soporte</h3>
+                                <p>Soporte tÃ©cnico especializado 24/7 para garantizar el funcionamiento Ã³ptimo de su infraestructura tecnolÃ³gica.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>ConsultorÃ­a y AsesorÃ­a Gerencial</h3>
+                                <p>Estrategias tecnolÃ³gicas alineadas con sus objetivos de negocio para maximizar resultados.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Arrendamiento de Equipos</h3>
+                                <p>Soluciones flexibles de arrendamiento y venta de equipos informÃ¡ticos de Ãºltima generaciÃ³n.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Outsourcing en InformÃ¡tica</h3>
+                                <p>Personal especializado para gestionar toda su infraestructura tecnolÃ³gica.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CATEGORÃA: REDES E INFRAESTRUCTURA -->
+                <div class="service-category-content" id="redes">
+                    <div class="services-grid">
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Canales Dedicados de Internet</h3>
+                                <p>Conexiones de alta velocidad y confiabilidad para mantener su negocio siempre conectado.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>ImplementaciÃ³n de Redes</h3>
+                                <p>DiseÃ±o e implementaciÃ³n de redes corporativas eficientes y escalables.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>AdministraciÃ³n de Servidores</h3>
+                                <p>GestiÃ³n y mantenimiento completo de servidores fÃ­sicos y virtuales.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>AdministraciÃ³n de Bases de Datos</h3>
+                                <p>DiseÃ±o, optimizaciÃ³n y gestiÃ³n de bases de datos empresariales.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CATEGORÃA: SEGURIDAD Y DESARROLLO -->
+                <div class="service-category-content" id="seguridad">
+                    <div class="services-grid">
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Sistemas de Seguridad Empresarial</h3>
+                                <p>Videovigilancia, control de acceso y sistemas de seguridad integral para su empresa.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>GestiÃ³n de Seguridad de la InformaciÃ³n</h3>
+                                <p>ImplementaciÃ³n de polÃ­ticas y protocolos para proteger sus activos digitales.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>Desarrollo de Portales Web</h3>
+                                <p>CreaciÃ³n de sitios web, portales corporativos y sistemas de informaciÃ³n a medida.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="service-card scroll-reveal">
+                            <div class="service-image">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div class="service-content">
+                                <h3>ConsultorÃ­a InformÃ¡tica</h3>
+                                <p>AsesorÃ­a especializada para optimizar sus procesos y sistemas tecnolÃ³gicos.</p>
+                                <a href="#" class="service-link">Ver mÃ¡s <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- E-commerce / Tienda -->
+    <section class="ecommerce scroll-reveal" id="tienda">
+        <div class="section-container">
+            <h2 class="section-title">Nuestra Tienda</h2>
+            <p class="section-subtitle">Productos tecnolÃ³gicos de calidad para su empresa</p>
+
+            <!-- Filtros de CategorÃ­as -->
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="filterProducts('all')">
+                    <i class="fas fa-th"></i> Todos
+                </button>
+                <button class="filter-btn" onclick="filterProducts('computadoras')">
+                    <i class="fas fa-laptop"></i> Computadoras
+                </button>
+                <button class="filter-btn" onclick="filterProducts('redes')">
+                    <i class="fas fa-network-wired"></i> Redes
+                </button>
+                <button class="filter-btn" onclick="filterProducts('impresoras')">
+                    <i class="fas fa-print"></i> Impresoras
+                </button>
+                <button class="filter-btn" onclick="filterProducts('servidores')">
+                    <i class="fas fa-server"></i> Servidores
+                </button>
+                <button class="filter-btn" onclick="filterProducts('almacenamiento')">
+                    <i class="fas fa-hdd"></i> Almacenamiento
+                </button>
+                <button class="filter-btn" onclick="filterProducts('accesorios')">
+                    <i class="fas fa-keyboard"></i> Accesorios
+                </button>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card" data-category="computadoras">
+                    <div class="product-image">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Laptop Empresarial</h3>
+                        <p>Equipos de alto rendimiento para trabajo profesional</p>
+                        <div class="product-price">$ 2.000.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="redes">
+                    <div class="product-image">
+                        <i class="fas fa-router"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Router Empresarial</h3>
+                        <p>Conectividad de alta velocidad y seguridad</p>
+                        <div class="product-price">$ 300.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="impresoras">
+                    <div class="product-image">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Impresora Multifuncional</h3>
+                        <p>ImpresiÃ³n, escaneo y copiado profesional</p>
+                        <div class="product-price">$ 1.500.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="servidores">
+                    <div class="product-image">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Servidor Rack</h3>
+                        <p>Soluciones de almacenamiento empresarial</p>
+                        <div class="product-price">$ 1.200.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="almacenamiento">
+                    <div class="product-image">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Disco Duro SSD</h3>
+                        <p>Almacenamiento rÃ¡pido y confiable</p>
+                        <div class="product-price">$ 500.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="accesorios">
+                    <div class="product-image">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Perifericos de oficina</h3>
+                        <p>Teclados, ratones y accesorios</p>
+                        <div class="product-price">$ 200.000</div>
+                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clientes -->
+    <section class="clients scroll-reveal" id="clientes">
+        <div class="section-container">
+            <h2 class="section-title">Ellos Han Confiado en Nosotros</h2>
+            <p class="clients-quote">
+                "Nos convertimos en el brazo tecnolÃ³gico de nuestros clientes para que se enfoquen en su negocio principal."
+            </p>
+
+            <!-- Carrusel Infinito de Logos -->
+            <div class="logos-carousel-wrapper">
+                <div class="logos-carousel">
+                    <div class="logos-track">
+                        <img src="images/clientes1.png" alt="Cliente 1" class="carousel-image">
+                        <img src="images/clientes2.png" alt="Cliente 2" class="carousel-image">
+                        <img src="images/clientes3.png" alt="Cliente 3" class="carousel-image">
+                        <img src="images/clientes4.png" alt="Cliente 4" class="carousel-image">
+                        <img src="images/clientes5.png" alt="Cliente 5" class="carousel-image">
+                        <img src="images/clientes6.png" alt="Cliente 6" class="carousel-image">
+                        <img src="images/clientes7.png" alt="Cliente 7" class="carousel-image">
+                        <img src="images/clientes8.png" alt="Cliente 8" class="carousel-image">
+                        <img src="images/clientes9.png" alt="Cliente 9" class="carousel-image">
+                        <img src="images/clientes1.png" alt="Cliente 1" class="carousel-image">
+                        <img src="images/clientes2.png" alt="Cliente 2" class="carousel-image">
+                        <img src="images/clientes3.png" alt="Cliente 3" class="carousel-image">
+                        <img src="images/clientes4.png" alt="Cliente 4" class="carousel-image">
+                        <img src="images/clientes5.png" alt="Cliente 5" class="carousel-image">
+                        <img src="images/clientes6.png" alt="Cliente 6" class="carousel-image">
+                        <img src="images/clientes7.png" alt="Cliente 7" class="carousel-image">
+                        <img src="images/clientes8.png" alt="Cliente 8" class_="carousel-image">
+                        <img src="images/clientes9.png" alt="Cliente 9" class="carousel-image">
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="brands-title">Nuestras Marcas</h3>
+            <div class="logos-carousel-wrapper">
+                <div class="logos-carousel">
+                    <div class="logos-track logos-track-reverse">
+                        <img src="images/Marcas1.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas2.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas3.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas4.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas5.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas6.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas7.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas8.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas9.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                        <img src="images/Marcas10.jpg" alt="Marcas Gateway IT" class="carousel-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="contact" id="contacto">
+        <div class="section-container">
+            <h2 class="section-title">ContÃ¡ctenos</h2>
+            <p class="section-subtitle">Estamos listos para ayudarle con sus necesidades tecnolÃ³gicas</p>
+
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-item-content">
+                            <h3>DirecciÃ³n</h3>
+                            <p>Calle Principal #123, Ciudad Empresarial</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div class="contact-item-content">
+                            <h3>TelÃ©fono</h3>
+                            <p>+57 (1) 234-5678</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div class="contact-item-content">
+                            <h3>Correo ElectrÃ³nico</h3>
+                            <p>contacto@gatewayit.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="contact-item-content">
+                            <h3>Horario de AtenciÃ³n</h3>
+                            <p>Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo ElectrÃ³nico</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">TelÃ©fono</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <img src="images/Logo_Gateway.png" alt="Gateway IT" style="height: 60px; margin-bottom: 1rem;">
+                <p style="color: var(--text-gray); margin-top: 1rem;">
+                    Soluciones tecnolÃ³gicas eficientes para el crecimiento de su empresa.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces RÃ¡pidos</h3>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#tienda">Tienda</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Servicios</h3>
+                <ul>
+                    <li><a href="#">Mantenimiento</a></li>
+                    <li><a href="#">ConsultorÃ­a</a></li>
+                    <li><a href="#">Seguridad</a></li>
+                    <li><a href="#">Outsourcing</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +57 (1) 234-5678</li>
+                    <li><i class="fas fa-envelope"></i> contacto@gatewayit.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Ciudad Empresarial</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Gateway IT. Todos los derechos reservados.</p>
+            <!--
+            <p class="footer-tagline">"La tecnologÃ­a, un aliado para el crecimiento de su empresa."</p>
+        -->
+        </div>
+    </footer>
+
+    <!-- Overlay del Carrito -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- Sidebar del Carrito -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Mi Carrito</h3>
+            <button class="cart-close" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Tu carrito estÃ¡ vacÃ­o</p>
+            </div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="cart-total-amount" id="cartTotal">$0</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">
+                <i class="fas fa-credit-card"></i> Proceder al Pago
+            </button>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeToggle">
+        <i class="fas fa-moon" id="darkModeIcon"></i>
+    </button>
+
+    <script>
+        // ==========================================
+        // CARRITO DE COMPRAS
+        // ==========================================
+        
+        let cart = [];
+        
+        // Cargar carrito desde localStorage
+        function loadCart() {
+            const savedCart = localStorage.getItem('gatewayit_cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartUI();
+            }
+        }
+        
+        // Guardar carrito en localStorage
+        function saveCart() {
+            localStorage.setItem('gatewayit_cart', JSON.stringify(cart));
+        }
+        
+        // Agregar producto al carrito
+        function addToCart(productName, price, icon) {
+            const existingItem = cart.find(item => item.name === productName);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    icon: icon,
+                    quantity: 1
+                });
+            }
+            
+            saveCart();
+            updateCartUI();
+            showNotification('Producto agregado al carrito');
+        }
+        
+        // Actualizar cantidad
+        function updateQuantity(productName, change) {
+            const item = cart.find(item => item.name === productName);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productName);
+                } else {
+                    saveCart();
+                    updateCartUI();
+                }
+            }
+        }
+        
+        // Eliminar del carrito
+        function removeFromCart(productName) {
+            cart = cart.filter(item => item.name !== productName);
+            saveCart();
+            updateCartUI();
+            showNotification('Producto eliminado del carrito');
+        }
+        
+        // Actualizar UI del carrito
+        function updateCartUI() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            // Actualizar contador
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+            
+            // Actualizar items
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-basket"></i>
+                        <p>Tu carrito estÃ¡ vacÃ­o</p>
+                    </div>
+                `;
+                cartFooter.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <i class="${item.icon}"></i>
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price}</div>
+                            <div class="cart-item-quantity">
+                                <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                            </div>
+                        </div>
+                        <i class="fas fa-trash cart-item-remove" onclick="removeFromCart('${item.name}')"></i>
+                    </div>
+                `).join('');
+                
+                // Calcular total
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = `$${total.toFixed(2)}`;
+                cartFooter.style.display = 'block';
+            }
+        }
+        
+        // Toggle carrito
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alert(`Â¡Gracias por su compra!\n\nTotal: $${total.toFixed(2)}\n\nEn un sitio real, esto lo llevarÃ­a a la pÃ¡gina de pago.`);
+            
+            // Limpiar carrito
+            cart = [];
+            saveCart();
+            updateCartUI();
+            toggleCart();
+        }
+        
+        // NotificaciÃ³n
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--gradient-primary);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                z-index: 10001;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+        
+        // ==========================================
+        // TABS DE SERVICIOS
+        // ==========================================
+        
+        function showServiceCategory(category) {
+            // Ocultar todas las categorÃ­as
+            const allContents = document.querySelectorAll('.service-category-content');
+            allContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Desactivar todos los tabs
+            const allTabs = document.querySelectorAll('.service-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar la categorÃ­a seleccionada
+            const selectedContent = document.getElementById(category);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            // Activar el tab seleccionado
+            event.target.closest('.service-tab').classList.add('active');
+            
+            // Reiniciar animaciones de las tarjetas
+            setTimeout(() => {
+                revealOnScroll();
+            }, 100);
+        }
+        
+        // ==========================================
+        // FILTROS DE PRODUCTOS
+        // ==========================================
+        
+        function filterProducts(category) {
+            const products = document.querySelectorAll('.product-card');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            // Actualizar botones activos
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.filter-btn').classList.add('active');
+            
+            // Filtrar productos
+            products.forEach(product => {
+                if (category === 'all' || product.dataset.category === category) {
+                    product.style.display = 'block';
+                    setTimeout(() => {
+                        product.style.opacity = '1';
+                        product.style.transform = 'scale(1)';
+                    }, 10);
+                } else {
+                    product.style.opacity = '0';
+                    product.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        product.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+        
+        // ==========================================
+        // PRODUCTOS - Actualizar botones
+        // ==========================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            loadDarkMode(); // Cargar modo oscuro guardado
+            
+            // Actualizar todos los botones de agregar al carrito
+            const products = [
+                { name: 'Laptop Empresarial', price: 2000000, icon: 'fas fa-laptop' },
+                { name: 'Router Empresarial', price: 300000, icon: 'fas fa-router' },
+                { name: 'Impresora Multifuncional', price: 1500000, icon: 'fas fa-print' },
+                { name: 'Servidor Rack', price: 1200000, icon: 'fas fa-server' },
+                { name: 'Disco Duro SSD', price: 500000, icon: 'fas fa-hdd' },
+                { name: 'Suministros de Oficina', price: 200000, icon: 'fas fa-keyboard' }
+            ];
+            
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach((button, index) => {
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    const product = products[index];
+                    addToCart(product.name, product.price, product.icon);
+                    
+                    // AnimaciÃ³n del botÃ³n
+                    this.innerHTML = '<i class="fas fa-check"></i> Agregado';
+                    this.style.background = '#28a745';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-shopping-cart"></i> Agregar al carrito';
+                        this.style.background = '';
+                    }, 1500);
+                };
+            });
+        });
+        
+        // ==========================================
+        // MENÃš MÃ“VIL
+        // ==========================================
+        
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // ==========================================
+        // SMOOTH SCROLLING
+        // ==========================================
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // ==========================================
+        // NAVBAR SCROLL EFFECT
+        // ==========================================
+        
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.scrollY;
+            
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // ==========================================
+        // FORMULARIO DE CONTACTO
+        // ==========================================
+        
+        const contactForm = document.querySelector('.contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Â¡Mensaje enviado! Nos comunicaremos pronto con usted.');
+            contactForm.reset();
+        });
+
+        // ==========================================
+        // ANIMACIONES DE SCROLL
+        // ==========================================
+        
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', revealOnScroll);
+        
+        // Ejecutar al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            revealOnScroll();
+            
+            // Agregar clases de animaciÃ³n a elementos
+            document.querySelectorAll('.service-card, .product-card, .value-card').forEach((el, index) => {
+                el.classList.add('scroll-reveal');
+                el.style.transitionDelay = `${index * 0.1}s`;
+            });
+            
+            document.querySelectorAll('.about-text').forEach(el => {
+                el.classList.add('scroll-reveal-left');
+            });
+            
+            document.querySelectorAll('.about-content img').forEach(el => {
+                el.classList.add('scroll-reveal-right');
+            });
+        });
+
+        // ==========================================
+        // DARK MODE (Modo Oscuro)
+        // ==========================================
+        
+        // Cargar preferencia guardada
+        function loadDarkMode() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                enableDarkMode();
+            }
+        }
+        
+        function enableDarkMode() {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeIcon').classList.remove('fa-moon');
+            document.getElementById('darkModeIcon').classList.add('fa-sun');
+            localStorage.setItem('darkMode', 'enabled');
+        }
+        
+        function disableDarkMode() {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('darkModeIcon').classList.remove('fa-sun');
+            document.getElementById('darkModeIcon').classList.add('fa-moon');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+        
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            if (isDarkMode) {
+                disableDarkMode();
+                showNotification('Modo claro activado â˜€ï¸');
+            } else {
+                enableDarkMode();
+                showNotification('Modo oscuro activado ðŸŒ™');
+            }
+        }
+
+        // ==========================================
+        // ANIMACIONES CSS ADICIONALES
+        // ==========================================
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script>
+        const counters = document.querySelectorAll('.metric-item h3[data-target]');
+
+        const animateCounter = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000; // 2 seconds
+            const stepTime = 20; // update every 20ms
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    if (counter.innerText.includes('%')) {
+                        counter.innerText = Math.ceil(current) + '%';
+                    } else if (counter.innerText.includes('+')) {
+                        counter.innerText = Math.ceil(current) + '+';
+                    } else {
+                        counter.innerText = Math.ceil(current);
+                    }
+                    setTimeout(updateCounter, stepTime);
+                } else {
+                    if (counter.innerText.includes('%')) {
+                        counter.innerText = target + '%';
+                    } else if (counter.innerText.includes('+')) {
+                        counter.innerText = target + '+';
+                    } else {
+                        counter.innerText = target;
+                    }
+                }
+            };
+
+            updateCounter();
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counters.forEach(counter => {
+                        animateCounter(counter);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.5 // Trigger when 50% of the element is visible
+        });
+
+        const metricsSection = document.querySelector('.hero-metrics');
+        if (metricsSection) {
+            observer.observe(metricsSection);
+        }
+    </script>
+</body>
+</html>

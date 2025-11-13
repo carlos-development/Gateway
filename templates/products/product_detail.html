@@ -1,0 +1,535 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       DETALLE DEL PRODUCTO
+       ========================================== */
+    .product-detail {
+        padding: 8rem 2rem 4rem;
+        background: var(--light-secondary);
+        min-height: 100vh;
+    }
+
+    .detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--light-card);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+    }
+
+    .detail-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        padding: 3rem;
+    }
+
+    /* ==========================================
+       IMAGEN DEL PRODUCTO
+       ========================================== */
+    .detail-image-container {
+        position: relative;
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 500px;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .detail-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .detail-image i {
+        font-size: 8rem;
+        color: var(--primary-color);
+    }
+
+    /* ==========================================
+       INFORMACIÓN DEL PRODUCTO
+       ========================================== */
+    .detail-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-gray);
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .product-category-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        width: fit-content;
+    }
+
+    .detail-info h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .detail-price {
+        font-size: 3rem;
+        color: var(--primary-color);
+        font-weight: 700;
+        margin: 1.5rem 0;
+    }
+
+    .detail-description {
+        color: var(--text-gray);
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    /* ==========================================
+       CARACTERÍSTICAS DEL PRODUCTO
+       ========================================== */
+    .product-features {
+        background: var(--light-secondary);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .product-features h3 {
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .product-features ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .product-features li {
+        padding: 0.5rem 0;
+        color: var(--text-gray);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .product-features li i {
+        color: var(--primary-color);
+    }
+
+    /* ==========================================
+       ACCIONES DEL PRODUCTO
+       ========================================== */
+    .product-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: auto;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .quantity-selector label {
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        border: 2px solid rgba(245, 134, 53, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .quantity-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .quantity-value {
+        width: 60px;
+        text-align: center;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .add-to-cart-btn {
+        flex: 1;
+        padding: 1.2rem 2rem;
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .add-to-cart-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 134, 53, 0.4);
+    }
+
+    .back-btn {
+        padding: 1.2rem 2rem;
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .back-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* ==========================================
+       PRODUCTOS RELACIONADOS
+       ========================================== */
+    .related-products {
+        padding: 3rem;
+        background: var(--light-bg);
+    }
+
+    .related-products h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--text-dark);
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .related-card {
+        background: var(--light-card);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        box-shadow: var(--shadow-card);
+    }
+
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(245, 134, 53, 0.15);
+    }
+
+    .related-image {
+        width: 100%;
+        height: 150px;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .related-image i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+
+    .related-content {
+        padding: 1rem;
+    }
+
+    .related-content h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .related-price {
+        font-size: 1.3rem;
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+    @media (max-width: 968px) {
+        .detail-content {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-info h1 {
+            font-size: 2rem;
+        }
+
+        .detail-price {
+            font-size: 2.5rem;
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+
+        .related-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        .detail-content {
+            padding: 1.5rem;
+        }
+
+        .detail-info h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     DETALLE DEL PRODUCTO
+     ========================================== -->
+<section class="product-detail">
+    <div class="detail-container">
+        <div class="detail-content">
+            <!-- Imagen del producto -->
+            <div class="detail-image-container">
+                <div class="detail-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <i class="{{ product.category.icon }}"></i>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Información del producto -->
+            <div class="detail-info">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <a href="{% url 'core:home' %}">Inicio</a> /
+                    <a href="{% url 'products:product_list' %}">Tienda</a> /
+                    <span>{{ product.name }}</span>
+                </div>
+
+                <!-- Categoría -->
+                <span class="product-category-badge">
+                    <i class="{{ product.category.icon }}"></i> {{ product.category.name }}
+                </span>
+
+                <!-- Nombre -->
+                <h1>{{ product.name }}</h1>
+
+                <!-- Precio -->
+                <div class="detail-price">${{ product.price|floatformat:0 }}</div>
+
+                <!-- Descripción -->
+                <div class="detail-description">
+                    {{ product.description }}
+                </div>
+
+                <!-- Características (si existen) -->
+                {% if product.features %}
+                <div class="product-features">
+                    <h3><i class="fas fa-list"></i> Características</h3>
+                    <ul>
+                        {% for feature in product.features.split|slice:":5" %}
+                        <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Selector de cantidad -->
+                <div class="quantity-selector">
+                    <label>Cantidad:</label>
+                    <div class="quantity-input">
+                        <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" class="quantity-value" value="1" min="1" max="99" readonly>
+                        <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="product-actions">
+                    <form method="POST" action="{% url 'products:add_to_cart' product.id %}" style="flex: 1;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" id="quantity-input" value="1">
+                        <button type="submit" class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                        </button>
+                    </form>
+                </div>
+
+                <a href="{% url 'products:product_list' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Volver a la Tienda
+                </a>
+            </div>
+        </div>
+
+        <!-- Productos relacionados -->
+        {% if related_products %}
+        <div class="related-products">
+            <h2>Productos Relacionados</h2>
+            <div class="related-grid">
+                {% for related in related_products %}
+                <a href="{% url 'products:product_detail' related.id %}" class="related-card">
+                    <div class="related-image">
+                        {% if related.image %}
+                            <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                        {% else %}
+                            <i class="{{ related.category.icon }}"></i>
+                        {% endif %}
+                    </div>
+                    <div class="related-content">
+                        <h3>{{ related.name }}</h3>
+                        <div class="related-price">${{ related.price|floatformat:0 }}</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // SELECTOR DE CANTIDAD
+    // ==========================================
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const hiddenInput = document.getElementById('quantity-input');
+        const currentValue = parseInt(input.value);
+        if (currentValue < 99) {
+            input.value = currentValue + 1;
+            hiddenInput.value = currentValue + 1;
+        }
+    }
+
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        const hiddenInput = document.getElementById('quantity-input');
+        const currentValue = parseInt(input.value);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            hiddenInput.value = currentValue - 1;
+        }
+    }
+
+    // ==========================================
+    // NOTIFICACIÓN
+    // ==========================================
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 10001;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // Animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Mostrar notificación si hay mensajes
+    {% if messages %}
+        {% for message in messages %}
+            showNotification('{{ message }}');
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.name }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% if service.image %}
+            <img src="{{ service.image.url }}" alt="{{ service.name }}" class="img-fluid">
+            {% else %}
+            <i class="{{ service.icon }} fa-10x"></i>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h1>{{ service.name }}</h1>
+            <p class="text-muted">{{ service.category.name }}</p>
+            <p>{{ service.full_description }}</p>
+            
+            {% if service.features %}
+            <h4>Características:</h4>
+            <ul>
+                {% for feature in service.features %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h2>Otros Servicios</h2>
+        <div class="row">
+            {% for related_service in related_services %}
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related_service.name }}</h5>
+                        <a href="{% url 'services:service_detail' related_service.slug %}" class="btn btn-primary">Ver</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

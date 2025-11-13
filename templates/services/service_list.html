@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Servicios - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       SECCIÓN SERVICIOS
+       ========================================== */
+    .services {
+        padding: 8rem 2rem 4rem;
+        background: var(--light-bg);
+        min-height: 100vh;
+    }
+
+    .section-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 2px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: var(--text-gray);
+        margin-bottom: 4rem;
+    }
+
+    /* ==========================================
+       TABS DE CATEGORÍAS
+       ========================================== */
+    .service-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 3rem 0;
+        flex-wrap: wrap;
+    }
+
+    .service-tab {
+        padding: 1.5rem 2.5rem;
+        background: white;
+        border: 2px solid rgba(245, 134, 53, 0.2);
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        min-width: 200px;
+        box-shadow: var(--shadow-card);
+        text-decoration: none;
+        color: var(--text-dark);
+    }
+
+    .service-tab:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 30px rgba(245, 134, 53, 0.2);
+    }
+
+    .service-tab.active {
+        background: var(--gradient-primary);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 30px rgba(245, 134, 53, 0.3);
+        transform: translateY(-5px);
+    }
+
+    .service-tab i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        transition: all 0.3s;
+    }
+
+    .service-tab.active i {
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .service-tab span {
+        font-weight: 600;
+        font-size: 1rem;
+        text-align: center;
+        transition: color 0.3s;
+    }
+
+    .service-tab.active span {
+        color: white;
+    }
+
+    /* ==========================================
+       GRID DE SERVICIOS
+       ========================================== */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2.5rem;
+        margin-top: 3rem;
+    }
+
+    .service-card {
+        background: var(--light-card);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        cursor: pointer;
+        box-shadow: var(--shadow-card);
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(245, 134, 53, 0.15);
+        border-color: var(--primary-color);
+    }
+
+    .service-image {
+        width: 100%;
+        height: 250px;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: var(--primary-color);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .service-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.03) 0%, transparent 100%);
+    }
+
+    .service-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .service-image i {
+        z-index: 1;
+    }
+
+    .service-content {
+        padding: 2rem;
+    }
+
+    .service-category-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+    }
+
+    .service-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+
+    .service-content p {
+        color: var(--text-gray);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .service-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: gap 0.3s;
+    }
+
+    .service-link:hover {
+        gap: 1rem;
+    }
+
+    /* ==========================================
+       NO HAY SERVICIOS
+       ========================================== */
+    .no-services {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-gray);
+    }
+
+    .no-services i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+    @media (max-width: 968px) {
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .service-tabs {
+            gap: 1rem;
+        }
+
+        .service-tab {
+            min-width: 150px;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .service-tab i {
+            font-size: 2rem;
+        }
+
+        .service-tab span {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .service-tabs {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .service-tab {
+            min-width: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     SECCIÓN SERVICIOS
+     ========================================== -->
+<section class="services" id="servicios">
+    <div class="section-container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <p class="section-subtitle">Soluciones integrales para todas sus necesidades tecnológicas</p>
+
+        <!-- Tabs de Categorías -->
+        <div class="service-tabs">
+            <a href="{% url 'services:service_list' %}" 
+               class="service-tab {% if not selected_category %}active{% endif %}">
+                <i class="fas fa-th"></i>
+                <span>Todos los Servicios</span>
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'services:filter_by_category' category.slug %}" 
+               class="service-tab {% if selected_category.id == category.id %}active{% endif %}">
+                <i class="{{ category.icon }}"></i>
+                <span>{{ category.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Grid de Servicios -->
+        {% if services %}
+        <div class="services-grid">
+            {% for service in services %}
+            <a href="{% url 'services:service_detail' service.id %}" class="service-card">
+                <!-- Imagen del servicio -->
+                <div class="service-image">
+                    {% if service.image %}
+                        <img src="{{ service.image.url }}" alt="{{ service.name }}">
+                    {% else %}
+                        <i class="{{ service.category.icon }}"></i>
+                    {% endif %}
+                </div>
+
+                <!-- Contenido del servicio -->
+                <div class="service-content">
+                    <span class="service-category-badge">
+                        <i class="{{ service.category.icon }}"></i> {{ service.category.name }}
+                    </span>
+                    <h3>{{ service.name }}</h3>
+                    <p>{{ service.description|truncatewords:20 }}</p>
+                    <span class="service-link">
+                        Ver más <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Mensaje cuando no hay servicios -->
+        <div class="no-services">
+            <i class="fas fa-tools"></i>
+            <p>No hay servicios disponibles en esta categoría.</p>
+            <a href="{% url 'services:service_list' %}" style="color: var(--primary-color); text-decoration: none; font-weight: 600; margin-top: 1rem; display: inline-block;">
+                Ver todos los servicios
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // ANIMACIONES DE SCROLL
+    // ==========================================
+    function revealOnScroll() {
+        const cards = document.querySelectorAll('.service-card');
+        
+        cards.forEach((card, index) => {
+            const cardTop = card.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (cardTop < windowHeight - 100) {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            }
+        });
+    }
+
+    // Inicializar animación
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.service-card');
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'all 0.6s ease';
+        });
+        
+        revealOnScroll();
+    });
+
+    window.addEventListener('scroll', revealOnScroll);
+</script>
+{% endblock %}

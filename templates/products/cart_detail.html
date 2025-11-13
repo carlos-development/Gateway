@@ -1,0 +1,503 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Carrito de Compras - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       CARRITO DE COMPRAS
+       ========================================== */
+    .cart-section {
+        padding: 8rem 2rem 4rem;
+        background: var(--light-secondary);
+        min-height: 100vh;
+    }
+
+    .cart-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 3rem;
+        color: var(--text-dark);
+    }
+
+    .cart-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    /* ==========================================
+       ITEMS DEL CARRITO
+       ========================================== */
+    .cart-items-container {
+        background: var(--light-card);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow-card);
+    }
+
+    .cart-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(245, 134, 53, 0.1);
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .cart-item:hover {
+        background: rgba(245, 134, 53, 0.02);
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item-image {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .cart-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .cart-item-image i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+
+    .cart-item-details {
+        flex: 1;
+    }
+
+    .cart-item-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .cart-item-category {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-item-price {
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-top: 0.5rem;
+    }
+
+    .cart-item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-top: 0.8rem;
+    }
+
+    .qty-btn {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--primary-color);
+        background: white;
+        color: var(--primary-color);
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+
+    .qty-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .qty-value {
+        font-weight: 600;
+        font-size: 1.1rem;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .cart-item-remove {
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: transform 0.3s;
+        padding: 0.5rem;
+    }
+
+    .cart-item-remove:hover {
+        transform: scale(1.2);
+    }
+
+    /* ==========================================
+       RESUMEN DEL CARRITO
+       ========================================== */
+    .cart-summary {
+        background: var(--light-card);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow-card);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .cart-summary h3 {
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+        font-size: 1.5rem;
+    }
+
+    .summary-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        color: var(--text-gray);
+        border-bottom: 1px solid rgba(245, 134, 53, 0.1);
+    }
+
+    .summary-line.total {
+        border-bottom: none;
+        border-top: 2px solid var(--primary-color);
+        margin-top: 1rem;
+        padding-top: 1rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .summary-line.total .amount {
+        color: var(--primary-color);
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 1.2rem;
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 134, 53, 0.4);
+    }
+
+    .continue-shopping {
+        width: 100%;
+        padding: 1rem;
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
+        color: var(--primary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 1rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .continue-shopping:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* ==========================================
+       CARRITO VACÍO
+       ========================================== */
+    .cart-empty {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--light-card);
+        border-radius: 15px;
+        box-shadow: var(--shadow-card);
+    }
+
+    .cart-empty i {
+        font-size: 5rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.3;
+        color: var(--primary-color);
+    }
+
+    .cart-empty h2 {
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .cart-empty p {
+        color: var(--text-gray);
+        margin-bottom: 2rem;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+    @media (max-width: 968px) {
+        .cart-content {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-summary {
+            position: static;
+        }
+
+        .cart-item {
+            flex-wrap: wrap;
+        }
+
+        .cart-item-details {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .cart-item {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+        }
+
+        .cart-item-quantity {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     SECCIÓN CARRITO
+     ========================================== -->
+<section class="cart-section">
+    <div class="cart-container">
+        <h2 class="section-title">
+            <i class="fas fa-shopping-cart"></i> Mi Carrito de Compras
+        </h2>
+
+        {% if cart_items %}
+        <div class="cart-content">
+            <!-- Items del carrito -->
+            <div class="cart-items-container">
+                {% for item in cart_items %}
+                <div class="cart-item">
+                    <!-- Imagen del producto -->
+                    <div class="cart-item-image">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <i class="{{ item.product.category.icon }}"></i>
+                        {% endif %}
+                    </div>
+
+                    <!-- Detalles del producto -->
+                    <div class="cart-item-details">
+                        <span class="cart-item-category">{{ item.product.category.name }}</span>
+                        <div class="cart-item-name">{{ item.product.name }}</div>
+                        <div class="cart-item-price">${{ item.product.price|floatformat:0 }} c/u</div>
+
+                        <!-- Selector de cantidad -->
+                        <div class="cart-item-quantity">
+                            <form method="POST" action="{% url 'products:update_cart' item.product.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="{{ item.quantity|add:'-1' }}">
+                                <button type="submit" class="qty-btn">-</button>
+                            </form>
+
+                            <span class="qty-value">{{ item.quantity }}</span>
+
+                            <form method="POST" action="{% url 'products:update_cart' item.product.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="{{ item.quantity|add:'1' }}">
+                                <button type="submit" class="qty-btn">+</button>
+                            </form>
+
+                            <span style="margin-left: 1rem; color: var(--text-gray);">
+                                Subtotal: <strong style="color: var(--primary-color);">${{ item.subtotal|floatformat:0 }}</strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Botón eliminar -->
+                    <form method="POST" action="{% url 'products:remove_from_cart' item.product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="cart-item-remove" title="Eliminar del carrito">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Resumen del carrito -->
+            <div class="cart-summary">
+                <h3><i class="fas fa-receipt"></i> Resumen del Pedido</h3>
+
+                <div class="summary-line">
+                    <span>Subtotal ({{ cart_items_count }} productos):</span>
+                    <span class="amount">${{ cart_subtotal|floatformat:0 }}</span>
+                </div>
+
+                <div class="summary-line">
+                    <span>IVA (19%):</span>
+                    <span class="amount">${{ cart_tax|floatformat:0 }}</span>
+                </div>
+
+                <div class="summary-line total">
+                    <span>Total:</span>
+                    <span class="amount">${{ cart_total|floatformat:0 }}</span>
+                </div>
+
+                <button type="button" class="checkout-btn" onclick="checkout()">
+                    <i class="fas fa-credit-card"></i> Proceder al Pago
+                </button>
+
+                <a href="{% url 'products:product_list' %}" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Seguir Comprando
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <!-- Carrito vacío -->
+        <div class="cart-empty">
+            <i class="fas fa-shopping-basket"></i>
+            <h2>Tu carrito está vacío</h2>
+            <p>Agrega productos para comenzar tu compra</p>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                <i class="fas fa-store"></i> Ir a la Tienda
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // FUNCIÓN CHECKOUT
+    // ==========================================
+    function checkout() {
+        if (confirm('¿Desea proceder con la compra?\n\nTotal: ${{ cart_total|floatformat:0 }}')) {
+            // Aquí se implementaría la lógica de pago
+            alert('¡Gracias por su compra!\n\nEn un sitio real, esto lo llevaría a la página de pago.');
+            // window.location.href = "{% url 'products:checkout' %}";
+        }
+    }
+
+    // ==========================================
+    // NOTIFICACIÓN
+    // ==========================================
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        const bgColor = type === 'success' ? 'var(--gradient-primary)' : '#dc3545';
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: ${bgColor};
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 10001;
+            animation: slideIn 0.3s ease;
+        `;
+        const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+        notification.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // Animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 134, 53, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(245, 134, 53, 0.5);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Mostrar notificación si hay mensajes
+    {% if messages %}
+        {% for message in messages %}
+            showNotification('{{ message }}');
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

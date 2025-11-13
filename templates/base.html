@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gateway IT - Soluciones Tecnológicas Eficientes{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos CSS Propios -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- ==========================================
+        NAVEGACIÓN
+        ========================================== -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="{% url 'core:home' %}" class="logo">
+                <img src="{% static 'img/Logo_Gateway.png' %}" alt="Gateway IT">
+            </a>
+
+            <!-- Links de navegación -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{% url 'core:home' %}#inicio">Inicio</a></li>
+                <li><a href="{% url 'core:home' %}#nosotros">Nosotros</a></li>
+                <li><a href="{% url 'services:service_list' %}">Servicios</a></li>
+                <li><a href="{% url 'products:product_list' %}">Tienda</a></li>
+                <li><a href="{% url 'core:home' %}#clientes">Clientes</a></li>
+                <li><a href="{% url 'contact:contact' %}">Contacto</a></li>
+                <li>
+                    <!-- Icono del carrito -->
+                    <a href="{% url 'products:cart_view' %}" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">{{ cart_items_count|default:0 }}</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Toggle menú móvil -->
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+         ========================================== -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer>
+        <div class="footer-container">
+            <!-- Sección 1: Logo y descripción -->
+            <div class="footer-section">
+                <img src="{% static 'images/Logo_Gateway.png' %}" alt="Gateway IT" style="height: 60px; margin-bottom: 1rem;">
+                <p style="color: var(--text-gray); margin-top: 1rem;">
+                    Soluciones tecnológicas eficientes para el crecimiento de su empresa.
+                </p>
+            </div>
+
+            <!-- Sección 2: Enlaces rápidos -->
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="{% url 'core:home' %}">Inicio</a></li>
+                    <li><a href="{% url 'core:home' %}#nosotros">Sobre Nosotros</a></li>
+                    <li><a href="{% url 'services:service_list' %}">Servicios</a></li>
+                    <li><a href="{% url 'products:product_list' %}">Tienda</a></li>
+                </ul>
+            </div>
+
+            <!-- Sección 3: Servicios -->
+            <div class="footer-section">
+                <h3>Servicios</h3>
+                <ul>
+                    <li><a href="{% url 'services:service_list' %}">Mantenimiento</a></li>
+                    <li><a href="{% url 'services:service_list' %}">Consultoría</a></li>
+                    <li><a href="{% url 'services:service_list' %}">Seguridad</a></li>
+                    <li><a href="{% url 'services:service_list' %}">Outsourcing</a></li>
+                </ul>
+            </div>
+
+            <!-- Sección 4: Contacto -->
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +57 (1) 234-5678</li>
+                    <li><i class="fas fa-envelope"></i> contacto@gatewayit.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Ciudad Empresarial</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 Gateway IT. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         BOTÓN MODO OSCURO
+         ========================================== -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeToggle">
+        <i class="fas fa-moon" id="darkModeIcon"></i>
+    </button>
+
+    <!-- ==========================================
+         SCRIPTS JAVASCRIPT
+         ========================================== -->
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Scripts Propios -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        {% block extra_js %}{% endblock %}
+    </script>
+</body>
+</html>

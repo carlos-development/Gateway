@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gateway IT - Soluciones Tecnológicas Eficientes{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     HERO SECTION
+     ========================================== -->
+<section class="hero" id="inicio">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Soluciones Tecnológicas Eficientes</h1>
+            <p>Gateway IT, la tecnología como facilitador para el crecimiento de su empresa.</p>
+            
+            <!-- Métricas -->
+            <div class="hero-metrics">
+                <div class="metric-item">
+                    <h3 data-target="100">100%</h3>
+                    <p>Seguridad</p>
+                </div>
+                <div class="metric-item">
+                    <h3 data-target="15">15+</h3>
+                    <p>Años</p>
+                </div>
+                <div class="metric-item">
+                    <h3>24/7</h3>
+                    <p>Soporte</p>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="hero-buttons">
+                <a href="{% url 'services:service_list' %}" class="btn btn-primary">Conozca nuestros servicios</a>
+                <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Adquiera productos</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+    SOBRE NOSOTROS
+    ========================================== -->
+<section class="about" id="nosotros">
+    <div class="section-container">
+        <h2 class="section-title">Sobre Nosotros</h2>
+        <p class="section-subtitle">Comprometidos con la excelencia tecnológica</p>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <p>
+                    <strong>Gateway IT</strong> está comprometido en entregar soluciones que se adapten a su empresa. Trabajamos con marcas reconocidas a nivel mundial, garantizando servicios seguros, confiables e innovadores respaldados por personal altamente calificado.
+                </p>
+                <p style="margin-top: 1.5rem;">
+                    Nos convertimos en el brazo tecnológico de nuestros clientes para que se enfoquen en su negocio principal, proporcionando soporte integral en todas las áreas de tecnología de la información.
+                </p>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600" alt="Equipo trabajando" style="width: 100%; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            </div>
+        </div>
+
+        <!-- Valores -->
+        <div class="values-grid">
+            <div class="value-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Seguridad</h3>
+                <p>Implementamos las mejores prácticas de seguridad para proteger su información y sistemas.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-certificate"></i>
+                <h3>Garantía</h3>
+                <p>Respaldamos nuestros servicios con garantía y soporte continuo de calidad.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Innovación</h3>
+                <p>Adoptamos tecnologías de vanguardia para mantener su empresa competitiva.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     CLIENTES
+     ========================================== -->
+<section class="clients" id="clientes">
+    <div class="section-container">
+        <h2 class="section-title">Ellos Han Confiado en Nosotros</h2>
+        <p class="clients-quote">
+            "Nos convertimos en el brazo tecnológico de nuestros clientes para que se enfoquen en su negocio principal."
+        </p>
+
+        <!-- Carrusel de clientes -->
+        {% if clients %}
+        <div class="logos-carousel-wrapper">
+            <div class="logos-carousel">
+                <div class="logos-track">
+                    {% for client in clients %}
+                    <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="carousel-image">
+                    {% endfor %}
+                    {% for client in clients %}
+                    <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="carousel-image">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Carrusel de marcas -->
+        <h3 class="brands-title">Nuestras Marcas</h3>
+        {% if brands %}
+        <div class="logos-carousel-wrapper">
+            <div class="logos-carousel">
+                <div class="logos-track logos-track-reverse">
+                    {% for brand in brands %}
+                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="carousel-image">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tienda - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       SECCIÓN E-COMMERCE / TIENDA
+       ========================================== */
+    .ecommerce {
+        padding: 8rem 2rem 4rem;
+        background: var(--light-secondary);
+        min-height: 100vh;
+    }
+
+    .section-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 2px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: var(--text-gray);
+        margin-bottom: 4rem;
+    }
+
+    /* ==========================================
+       FILTROS DE CATEGORÍAS
+       ========================================== */
+    .category-filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 3rem 0;
+    }
+
+    .filter-btn {
+        padding: 0.8rem 1.5rem;
+        background: white;
+        border: 2px solid rgba(245, 134, 53, 0.2);
+        border-radius: 50px;
+        color: var(--text-dark);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .filter-btn:hover {
+        border-color: var(--primary-color);
+        background: rgba(245, 134, 53, 0.05);
+        transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+        background: var(--gradient-primary);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 15px rgba(245, 134, 53, 0.3);
+    }
+
+    .filter-btn i {
+        font-size: 1.1rem;
+    }
+
+    /* ==========================================
+       GRID DE PRODUCTOS
+       ========================================== */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .product-card {
+        background: var(--light-card);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(245, 134, 53, 0.15);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--primary-color);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-image i {
+        font-size: 4rem;
+    }
+
+    .product-content {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-category {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        width: fit-content;
+    }
+
+    .product-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+        color: var(--text-dark);
+        min-height: 2.4rem;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+
+    .product-content p {
+        color: var(--text-gray);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        flex: 1;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+    }
+
+    .add-to-cart {
+        flex: 1;
+        padding: 0.8rem;
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .add-to-cart:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 20px rgba(245, 134, 53, 0.4);
+    }
+
+    .view-details {
+        padding: 0.8rem 1rem;
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        border-radius: 8px;
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .view-details:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* ==========================================
+       MENSAJE CUANDO NO HAY PRODUCTOS
+       ========================================== */
+    .no-products {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-gray);
+    }
+
+    .no-products i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+    @media (max-width: 968px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .category-filters {
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .products-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     SECCIÓN TIENDA / E-COMMERCE
+     ========================================== -->
+<section class="ecommerce" id="tienda">
+    <div class="section-container">
+        <h2 class="section-title">Nuestra Tienda</h2>
+        <p class="section-subtitle">Productos tecnológicos de calidad para su empresa</p>
+
+        <!-- Filtros de Categorías -->
+        <div class="category-filters">
+            <a href="{% url 'products:product_list' %}" 
+               class="filter-btn {% if not selected_category %}active{% endif %}">
+                <i class="fas fa-th"></i> Todos
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'products:filter_by_category' category.slug %}" 
+               class="filter-btn {% if selected_category.id == category.id %}active{% endif %}">
+                <i class="{{ category.icon }}"></i> {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Grid de Productos -->
+        {% if products %}
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card" data-category="{{ product.category.slug }}">
+                <!-- Imagen del producto -->
+                <div class="product-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <i class="{{ product.category.icon }}"></i>
+                    {% endif %}
+                </div>
+
+                <!-- Contenido del producto -->
+                <div class="product-content">
+                    <span class="product-category">{{ product.category.name }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:15 }}</p>
+                    <div class="product-price">${{ product.price|floatformat:0 }}</div>
+                    
+                    <!-- Acciones -->
+                    <div class="product-actions">
+                        <form method="POST" action="{% url 'products:add_to_cart' product.id %}" style="flex: 1;">
+                            {% csrf_token %}
+                            <button type="submit" class="add-to-cart">
+                                <i class="fas fa-shopping-cart"></i> Agregar
+                            </button>
+                        </form>
+                        <a href="{% url 'products:product_detail' product.id %}" class="view-details">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Mensaje cuando no hay productos -->
+        <div class="no-products">
+            <i class="fas fa-box-open"></i>
+            <p>No hay productos disponibles en este momento.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // NOTIFICACIÓN AL AGREGAR AL CARRITO
+    // ==========================================
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 10001;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // Animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Mostrar notificación si se agregó al carrito
+    {% if messages %}
+        {% for message in messages %}
+            showNotification('{{ message }}');
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

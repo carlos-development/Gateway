@@ -1,0 +1,45 @@
+<div class="container" id="cart-container" hx-target="this" hx-swap="outerHTML">
+    <h1>Tu Carrito de Compras</h1>
+    
+    {% if not cart.items.all %}
+        <p>Tu carrito está vacío.</p>
+        <a href="{% url 'products:product_list' %}" class="btn btn-primary">Ver productos</a>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        <form hx-post="{% url 'products:update_cart' item.id %}" hx-trigger="change">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 80px;">
+                        </form>
+                    </td>
+                    <td>${{ item.price|floatformat:0 }}</td>
+                    <td>${{ item.subtotal|floatformat:0 }}</td>
+                    <td>
+                        <button hx-post="{% url 'products:remove_from_cart' item.id %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <h3>Total: ${{ cart.total|floatformat:0 }}</h3>
+            <a href="#" class="btn btn-success">Proceder al Pago</a>
+        </div>
+    {% endif %}
+</div>
