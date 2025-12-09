@@ -1,0 +1,633 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mi Perfil - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================
+       PERFIL DE USUARIO
+       ========================================== */
+    .profile-section {
+        padding: 5rem 2rem 3rem;
+        background: var(--light-secondary);
+        min-height: 100vh;
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* ==========================================
+       HEADER DEL PERFIL
+       ========================================== */
+    .profile-header {
+        background: var(--light-card);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .profile-info h1 {
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .profile-info p {
+        color: var(--text-gray);
+        margin: 0.2rem 0;
+    }
+
+    .profile-info .badge {
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        background: rgba(245, 134, 53, 0.1);
+        color: var(--primary-color);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    /* ==========================================
+       TABS
+       ========================================== */
+    .profile-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid rgba(245, 134, 53, 0.15);
+        overflow-x: auto;
+    }
+
+    .profile-tab {
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-gray);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        position: relative;
+        font-size: 0.95rem;
+    }
+
+    .profile-tab:hover {
+        color: var(--primary-color);
+    }
+
+    .profile-tab.active {
+        color: var(--primary-color);
+    }
+
+    .profile-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--gradient-primary);
+        border-radius: 3px 3px 0 0;
+    }
+
+    .profile-tab i {
+        margin-right: 0.5rem;
+    }
+
+    /* ==========================================
+       CONTENIDO DE TABS
+       ========================================== */
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards de información */
+    .info-card {
+        background: var(--light-card);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-card);
+        border: 1px solid rgba(245, 134, 53, 0.15);
+    }
+
+    .info-card h3 {
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card h3 i {
+        color: var(--primary-color);
+    }
+
+    .info-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 1rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: var(--text-gray);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        color: var(--text-dark);
+        font-size: 0.95rem;
+    }
+
+    /* Botones */
+    .btn-edit {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(245, 134, 53, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* Lista de direcciones */
+    .address-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .address-item {
+        background: var(--light-secondary);
+        padding: 1.2rem;
+        border-radius: 12px;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+
+    .address-item.default {
+        border-color: var(--primary-color);
+        background: rgba(245, 134, 53, 0.05);
+    }
+
+    .address-content h4 {
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .address-content p {
+        color: var(--text-gray);
+        margin: 0.2rem 0;
+        font-size: 0.9rem;
+    }
+
+    .address-badge {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .address-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        border: 1px solid rgba(245, 134, 53, 0.3);
+        background: white;
+        color: var(--primary-color);
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-icon:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .btn-icon.delete {
+        color: #dc3545;
+        border-color: rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-icon.delete:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* Login History */
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--light-secondary);
+        border-radius: 10px;
+        margin-bottom: 0.8rem;
+        border: 1px solid rgba(245, 134, 53, 0.1);
+    }
+
+    .history-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(245, 134, 53, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        flex-shrink: 0;
+    }
+
+    .history-content {
+        flex: 1;
+    }
+
+    .history-content h4 {
+        color: var(--text-dark);
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .history-content p {
+        color: var(--text-gray);
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .history-time {
+        color: var(--text-gray);
+        font-size: 0.85rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--text-gray);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-tabs {
+            flex-wrap: wrap;
+        }
+
+        .info-row {
+            grid-template-columns: 1fr;
+            gap: 0.3rem;
+        }
+
+        .address-item {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="profile-container">
+        <!-- Header del Perfil -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {{ user.first_name.0 }}{{ user.last_name.0 }}
+            </div>
+            <div class="profile-info">
+                <h1>{{ user.get_full_name }}</h1>
+                <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+                {% if user.phone %}
+                <p><i class="fas fa-phone"></i> {{ user.phone }}</p>
+                {% endif %}
+                {% if user.is_business %}
+                <span class="badge"><i class="fas fa-building"></i> Cuenta Empresarial</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Tabs de Navegación -->
+        <div class="profile-tabs">
+            <button class="profile-tab active" data-tab="info">
+                <i class="fas fa-user"></i> Información Personal
+            </button>
+            <button class="profile-tab" data-tab="addresses">
+                <i class="fas fa-map-marker-alt"></i> Direcciones de Envío
+            </button>
+            {% if user.is_business %}
+            <button class="profile-tab" data-tab="business">
+                <i class="fas fa-building"></i> Perfil Empresarial
+            </button>
+            {% endif %}
+            <button class="profile-tab" data-tab="security">
+                <i class="fas fa-shield-alt"></i> Seguridad
+            </button>
+        </div>
+
+        <!-- Tab: Información Personal -->
+        <div class="tab-content active" id="info">
+            <div class="info-card">
+                <h3><i class="fas fa-user-circle"></i> Datos Personales</h3>
+                <div class="info-row">
+                    <span class="info-label">Nombre de Usuario:</span>
+                    <span class="info-value">{{ user.username }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nombre Completo:</span>
+                    <span class="info-value">{{ user.get_full_name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Correo Electrónico:</span>
+                    <span class="info-value">{{ user.email }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Teléfono:</span>
+                    <span class="info-value">{{ user.phone|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Tipo de Cuenta:</span>
+                    <span class="info-value">
+                        {% if user.is_business %}
+                            <i class="fas fa-building"></i> Empresarial
+                        {% else %}
+                            <i class="fas fa-user"></i> Personal
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Miembro desde:</span>
+                    <span class="info-value">{{ user.date_joined|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+
+            <a href="{% url 'accounts:profile_update' %}" class="btn-edit">
+                <i class="fas fa-edit"></i> Editar Perfil
+            </a>
+        </div>
+
+        <!-- Tab: Direcciones de Envío -->
+        <div class="tab-content" id="addresses">
+            <div class="info-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Mis Direcciones</h3>
+
+                {% if shipping_addresses %}
+                <div class="address-list">
+                    {% for address in shipping_addresses %}
+                    <div class="address-item {% if address.is_default %}default{% endif %}">
+                        <div class="address-content">
+                            {% if address.is_default %}
+                            <span class="address-badge">Predeterminada</span>
+                            {% endif %}
+                            <h4>{{ address.full_name }}</h4>
+                            <p>{{ address.address_line1 }}</p>
+                            {% if address.address_line2 %}
+                            <p>{{ address.address_line2 }}</p>
+                            {% endif %}
+                            <p>{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+                            <p>{{ address.country }}</p>
+                            <p><i class="fas fa-phone"></i> {{ address.phone }}</p>
+                        </div>
+                        <div class="address-actions">
+                            <a href="{% url 'accounts:address_update' address.id %}" class="btn-icon" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{% url 'accounts:address_delete' address.id %}" method="POST" style="display: inline;"
+                                  onsubmit="return confirm('¿Estás seguro de eliminar esta dirección?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-icon delete" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>No tienes direcciones de envío registradas</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'accounts:address_create' %}" class="btn-edit">
+                <i class="fas fa-plus"></i> Agregar Nueva Dirección
+            </a>
+        </div>
+
+        <!-- Tab: Perfil Empresarial (solo si es cuenta business) -->
+        {% if user.is_business %}
+        <div class="tab-content" id="business">
+            <div class="info-card">
+                <h3><i class="fas fa-building"></i> Información Empresarial</h3>
+
+                {% if business_profile %}
+                <div class="info-row">
+                    <span class="info-label">Nombre de la Empresa:</span>
+                    <span class="info-value">{{ business_profile.company_name|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">NIT:</span>
+                    <span class="info-value">{{ business_profile.nit|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Tipo de Empresa:</span>
+                    <span class="info-value">{{ business_profile.get_business_type_display|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dirección Fiscal:</span>
+                    <span class="info-value">{{ business_profile.fiscal_address|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ciudad:</span>
+                    <span class="info-value">{{ business_profile.fiscal_city }}, {{ business_profile.fiscal_state }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Teléfono Empresarial:</span>
+                    <span class="info-value">{{ business_profile.business_phone|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email Empresarial:</span>
+                    <span class="info-value">{{ business_profile.business_email|default:"No especificado" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Sitio Web:</span>
+                    <span class="info-value">{{ business_profile.website|default:"No especificado" }}</span>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-building"></i>
+                    <p>Completa tu perfil empresarial para acceder a todas las funcionalidades</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'accounts:business_profile' %}" class="btn-edit">
+                <i class="fas fa-edit"></i> {% if business_profile %}Editar{% else %}Completar{% endif %} Perfil Empresarial
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Tab: Seguridad -->
+        <div class="tab-content" id="security">
+            <div class="info-card">
+                <h3><i class="fas fa-lock"></i> Contraseña y Seguridad</h3>
+                <p style="color: var(--text-gray); margin-bottom: 1rem;">
+                    Mantén tu cuenta segura actualizando tu contraseña regularmente.
+                </p>
+                <a href="{% url 'accounts:change_password' %}" class="btn-edit">
+                    <i class="fas fa-key"></i> Cambiar Contraseña
+                </a>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-history"></i> Historial de Acceso</h3>
+                {% if login_history %}
+                {% for login in login_history %}
+                <div class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-{% if login.success %}check-circle{% else %}times-circle{% endif %}"></i>
+                    </div>
+                    <div class="history-content">
+                        <h4>
+                            {% if login.success %}
+                            Inicio de sesión exitoso
+                            {% else %}
+                            Intento de inicio de sesión fallido
+                            {% endif %}
+                        </h4>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ login.ip_address }}</p>
+                    </div>
+                    <div class="history-time">
+                        {{ login.timestamp|date:"d/m/Y H:i" }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-history"></i>
+                    <p>No hay historial de acceso disponible</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // SISTEMA DE TABS
+    // ==========================================
+    document.querySelectorAll('.profile-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remover active de todos los tabs
+            document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            // Activar el tab clickeado
+            tab.classList.add('active');
+            const tabId = tab.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+</script>
+{% endblock %}

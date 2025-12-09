@@ -134,10 +134,61 @@ class Product(models.Model):
     def in_stock(self):
         """Verifica si hay stock disponible"""
         return self.stock > 0
-    
+
+    @property
+    def primary_image(self):
+        """Retorna la imagen principal del producto"""
+        # Intentar obtener la imagen marcada como principal
+        primary = self.images.filter(is_primary=True).first()
+        if primary:
+            return primary.image.url
+        # Si no hay principal, usar la primera imagen
+        first = self.images.first()
+        if first:
+            return first.image.url
+        # Si no hay imágenes en la galería, usar la imagen del campo directo
+        if self.image:
+            return self.image.url
+        return None
+
+    @property
+    def all_images(self):
+        """Retorna todas las imágenes del producto"""
+        return self.images.all()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class ProductImage(models.Model):
+    """Imágenes adicionales de productos (galería)"""
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    image = models.ImageField(upload_to='products/')
+    alt_text = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="Imagen principal del producto"
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = "Imagen de Producto"
+        verbose_name_plural = "Imágenes de Productos"
+
+    def __str__(self):
+        return f"{self.product.name} - Imagen {self.order}"
+
+    def save(self, *args, **kwargs):
+        # Si es la primera imagen, marcarla como principal
+        if not self.pk and not self.product.images.exists():
+            self.is_primary = True
         super().save(*args, **kwargs)
 
 

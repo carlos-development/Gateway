@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gracias por contactarnos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background-color: #ffffff;
+            padding: 40px 30px 30px;
+            text-align: center;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 25px;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #000000;
+        }
+        .email-header p {
+            margin: 12px 0 0;
+            font-size: 16px;
+            color: #666;
+        }
+        .email-body {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .message-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .success-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        .success-box h3 {
+            margin: 0 0 10px;
+            color: #155724;
+            font-size: 16px;
+        }
+        .success-box p {
+            margin: 0;
+            color: #155724;
+            line-height: 1.6;
+        }
+        .social-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn-social {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-social img {
+            width: 24px;
+            height: 24px;
+        }
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        .btn-whatsapp:hover {
+            background-color: #20BA5A;
+            transform: translateY(-2px);
+        }
+        .btn-facebook {
+            background-color: #1877F2;
+            color: white;
+        }
+        .btn-facebook:hover {
+            background-color: #166FE5;
+            transform: translateY(-2px);
+        }
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+        .email-footer p {
+            margin: 8px 0;
+        }
+        .footer-logo {
+            max-width: 120px;
+            height: auto;
+            margin: 15px 0;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <img src="cid:logo" alt="Gateway IT" class="logo">
+            <h1>Mensaje Recibido</h1>
+            <p>Gracias por contactar a Gateway IT</p>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <p class="greeting">Hola {{ contact.name }},</p>
+
+            <p class="message-text">
+                Hemos recibido tu mensaje correctamente y queremos agradecerte por ponerte en contacto con nosotros.
+            </p>
+
+            <div class="success-box">
+                <h3>✅ Tu mensaje ha sido registrado</h3>
+                <p>Nuestro equipo revisará tu consulta y te responderemos a la brevedad posible, generalmente dentro de las próximas 24 horas hábiles.</p>
+            </div>
+
+            <p class="message-text" style="text-align: center; margin-top: 30px;">
+                <strong>¿Necesitas ayuda inmediata?</strong><br>
+                Contáctanos directamente por:
+            </p>
+
+            <div class="social-buttons">
+                <a href="https://wa.me/573175003422" class="btn-social btn-whatsapp">
+                    <img src="cid:whatsapp" alt="WhatsApp"> WhatsApp
+                </a>
+                <a href="https://www.facebook.com/gatewayitcol/" class="btn-social btn-facebook">
+                    <img src="cid:facebook" alt="Facebook"> Facebook
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <img src="cid:logo" alt="Gateway IT" class="footer-logo">
+            <p><strong>Gateway IT</strong></p>
+            <p>Soluciones tecnológicas eficientes para el crecimiento de su empresa</p>
+
+            <p style="margin-top: 20px; color: #999; font-size: 12px;">
+                Este es un mensaje automático de confirmación. Por favor no respondas a este correo.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

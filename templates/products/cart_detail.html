@@ -422,11 +422,8 @@
     // FUNCIÓN CHECKOUT
     // ==========================================
     function checkout() {
-        if (confirm('¿Desea proceder con la compra?\n\nTotal: ${{ cart_total|floatformat:0 }}')) {
-            // Aquí se implementaría la lógica de pago
-            alert('¡Gracias por su compra!\n\nEn un sitio real, esto lo llevaría a la página de pago.');
-            // window.location.href = "{% url 'products:checkout' %}";
-        }
+        // Redirigir directamente al checkout con Widget de Wompi
+        window.location.href = "{% url 'payments:checkout_widget' %}";
     }
 
     // ==========================================

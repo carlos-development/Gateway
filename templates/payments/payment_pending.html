@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<style>
+    .payment-status-container {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .status-card {
+        background: white;
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+
+    .status-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .status-icon.pending {
+        background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+        color: white;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    .status-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .status-message {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .payment-details {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        text-align: left;
+    }
+
+    .payment-details h3 {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .detail-value {
+        color: #333;
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .detail-row.total {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        padding-top: 20px;
+        border-top: 2px solid #e0e0e0;
+    }
+
+    .detail-row.total .detail-value {
+        color: #FF9800;
+    }
+
+    .transaction-id {
+        background: white;
+        border: 2px solid #FF9800;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+        font-family: monospace;
+        font-size: 0.95rem;
+        color: #333;
+        word-break: break-all;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #F58635 0%, #ff9d5c 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 134, 53, 0.3);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #333;
+        border: 2px solid #e0e0e0;
+    }
+
+    .btn-secondary:hover {
+        border-color: #F58635;
+        color: #F58635;
+    }
+
+    .info-box {
+        background: #fff3e0;
+        border-left: 4px solid #FF9800;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .info-box h4 {
+        color: #F57C00;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .info-box ul {
+        margin: 15px 0;
+        padding-left: 20px;
+        color: #666;
+    }
+
+    .info-box li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 20px auto;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #FF9800;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .auto-refresh-notice {
+        font-size: 0.85rem;
+        color: #999;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .status-card {
+            padding: 40px 25px;
+        }
+        .status-title {
+            font-size: 1.6rem;
+        }
+        .action-buttons {
+            flex-direction: column;
+        }
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block title %}Pago Pendiente - Gateway IT{% endblock %}
+
+{% block content %}
+<div class="payment-status-container">
+    <div class="status-card">
+        <div class="status-icon pending">
+            <i class="fas fa-clock"></i>
+        </div>
+
+        <h1 class="status-title">Pago Pendiente</h1>
+        <p class="status-message">
+            Tu pago está siendo procesado. Te notificaremos cuando se complete la transacción.
+        </p>
+
+        <div class="spinner"></div>
+        <p class="auto-refresh-notice">
+            <i class="fas fa-sync-alt"></i> Esta página se actualiza automáticamente cada 10 segundos
+        </p>
+
+        {% if payment %}
+        <div class="transaction-id">
+            <strong>ID de Transacción:</strong> {{ payment.wompi_transaction_id }}
+        </div>
+
+        <div class="payment-details">
+            <h3>Detalles del Pago</h3>
+
+            <div class="detail-row">
+                <span class="detail-label">Orden:</span>
+                <span class="detail-value">{{ order.order_number }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Método de Pago:</span>
+                <span class="detail-value">
+                    {% if payment.payment_method == 'CARD' %}
+                        <i class="fas fa-credit-card"></i> Tarjeta
+                    {% elif payment.payment_method == 'PSE' %}
+                        <i class="fas fa-university"></i> PSE
+                    {% elif payment.payment_method == 'NEQUI' %}
+                        <i class="fas fa-mobile-alt"></i> Nequi
+                    {% elif payment.payment_method == 'BANCOLOMBIA_TRANSFER' %}
+                        <i class="fas fa-exchange-alt"></i> Bancolombia
+                    {% else %}
+                        {{ payment.payment_method }}
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Fecha:</span>
+                <span class="detail-value">{{ order.created_at|date:"d/m/Y H:i" }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Estado:</span>
+                <span class="detail-value" style="color: #FF9800;">
+                    <i class="fas fa-clock"></i> Pendiente
+                </span>
+            </div>
+
+            <div class="detail-row total">
+                <span class="detail-label">Total:</span>
+                <span class="detail-value">${{ order.total_amount|floatformat:0|intcomma }} COP</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h4><i class="fas fa-info-circle"></i> ¿Qué sigue?</h4>
+
+            {% if payment.payment_method == 'PSE' %}
+            <p>Para completar tu pago con <strong>PSE</strong>:</p>
+            <ul>
+                <li>Si no fuiste redirigido automáticamente al portal de tu banco, revisa tu email</li>
+                <li>Completa el proceso de autenticación en el portal de tu banco</li>
+                <li>Una vez confirmado, recibirás un email de confirmación</li>
+            </ul>
+            
+            {% elif payment.payment_method == 'NEQUI' %}
+            <p>Para completar tu pago con <strong>Nequi</strong>:</p>
+            <ul>
+                <li><strong>Revisa tu celular</strong> - Recibirás una notificación push de Nequi</li>
+                <li>Abre la <strong>app de Nequi</strong> y aprueba el pago</li>
+                <li>El pago se confirmará automáticamente en segundos</li>
+            </ul>
+            
+            {% elif payment.payment_method == 'BANCOLOMBIA_TRANSFER' %}
+            <p>Para completar tu pago con <strong>Bancolombia</strong>:</p>
+            <ul>
+                <li>Si no fuiste redirigido, abre la <strong>app de Bancolombia</strong></li>
+                <li>Busca la solicitud de pago pendiente</li>
+                <li>Completa la transferencia desde tu cuenta</li>
+            </ul>
+            
+            {% elif payment.payment_method == 'CARD' %}
+            <p>Tu pago con <strong>tarjeta</strong> está siendo procesado:</p>
+            <ul>
+                <li>El banco está verificando la transacción</li>
+                <li>Este proceso puede tomar algunos segundos</li>
+                <li>Recibirás confirmación una vez completado</li>
+            </ul>
+            
+            {% else %}
+            <p>Estamos procesando tu pago:</p>
+            <ul>
+                <li>Recibirás un email de confirmación en breve</li>
+                <li>El proceso puede tomar algunos minutos</li>
+                <li>Guarda tu ID de transacción para futuras referencias</li>
+            </ul>
+            {% endif %}
+
+            <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ffe0b2;">
+                <i class="fas fa-envelope" style="color: #FF9800;"></i>
+                Recibirás un email a <strong>{{ order.customer_email }}</strong> cuando se confirme tu pago.
+            </p>
+        </div>
+        {% endif %}
+
+        <div class="action-buttons">
+            <a href="{% url 'core:home' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </a>
+            <button onclick="location.reload()" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> Actualizar Estado
+            </button>
+        </div>
+    </div>
+</div>
+
+{% if payment %}
+<script>
+// Auto-refresh cada 10 segundos para verificar el estado
+setTimeout(function() {
+    location.reload();
+}, 10000);
+</script>
+{% endif %}
+{% endblock %}

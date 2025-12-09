@@ -3,6 +3,8 @@
 
 {% block title %}Gateway IT - Soluciones Tecnológicas Eficientes{% endblock %}
 
+{% block body_class %}home-page{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
@@ -28,7 +30,7 @@
                     <p>Años</p>
                 </div>
                 <div class="metric-item">
-                    <h3>24/7</h3>
+                    <h3 data-support247="true">0/0</h3>
                     <p>Soporte</p>
                 </div>
             </div>
@@ -50,17 +52,58 @@
         <h2 class="section-title">Sobre Nosotros</h2>
         <p class="section-subtitle">Comprometidos con la excelencia tecnológica</p>
         
-        <div class="about-content">
-            <div class="about-text">
-                <p>
-                    <strong>Gateway IT</strong> está comprometido en entregar soluciones que se adapten a su empresa. Trabajamos con marcas reconocidas a nivel mundial, garantizando servicios seguros, confiables e innovadores respaldados por personal altamente calificado.
-                </p>
-                <p style="margin-top: 1.5rem;">
-                    Nos convertimos en el brazo tecnológico de nuestros clientes para que se enfoquen en su negocio principal, proporcionando soporte integral en todas las áreas de tecnología de la información.
-                </p>
+        <!-- Contenido Principal -->
+        <div class="about-main-content">
+            <!-- Imagen -->
+            <div class="about-image-container">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=1000&fit=crop" alt="Equipo Gateway IT" class="about-image">
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <h3>15+</h3>
+                        <p>Años de experiencia</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100+</h3>
+                        <p>Clientes satisfechos</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Soporte técnico</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600" alt="Equipo trabajando" style="width: 100%; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+
+            <!-- Texto y Misión/Visión -->
+            <div class="about-content-text">
+                <div class="about-intro-text">
+                    <p><strong>Gateway IT</strong> está comprometido en entregar soluciones que se adapten a su empresa, combinando experiencia, innovación y un equipo de profesionales altamente calificados.</p>
+                    <p>Desde hace más de 15 años, nos hemos consolidado como un socio tecnológico confiable para empresas que buscan optimizar su infraestructura y procesos mediante soluciones innovadoras.</p>
+                </div>
+
+                <!-- Misión y Visión en línea -->
+                <div class="mission-vision-inline">
+                    <!-- Misión -->
+                    <div class="mv-item">
+                        <div class="mv-header">
+                            <div class="mv-icon-small">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h3>Nuestra Misión</h3>
+                        </div>
+                        <p>Somos una compañía de calidad orientada a la generación de soluciones tecnológicas innovadoras; distribuidora de equipos y accesorios de cómputo de alta tecnología, adaptables a las necesidades empresariales, con el objetivo de incrementar su competitividad y productividad.</p>
+                    </div>
+
+                    <!-- Visión -->
+                    <div class="mv-item">
+                        <div class="mv-header">
+                            <div class="mv-icon-small">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3>Nuestra Visión</h3>
+                        </div>
+                        <p>Para el 2025, Gateway IT, será reconocida a nivel regional, como una empresa líder en la generación de soluciones tecnológicas confiables e innovadoras que agregan valor al interior de las organizaciones y sus procesos de negocio.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -86,6 +129,90 @@
 </section>
 
 <!-- ==========================================
+     SERVICIOS
+     ========================================== -->
+<section class="services" id="servicios">
+    <div class="section-container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <p class="section-subtitle">Soluciones integrales para todas sus necesidades tecnológicas</p>
+
+        <div class="services-grid">
+            <!-- Servicio 1: Red e Infraestructura -->
+            <div class="service-card" data-service="infraestructura">
+                <div class="service-card-header">
+                    <div class="service-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Red e Infraestructura</h3>
+                </div>
+                <p class="service-short-desc">Implementamos canales dedicados, desarrollamos portales web y sistemas de información, y brindamos outsourcing y consultoría para optimizar su infraestructura tecnológica.</p>
+                <button class="btn-expand" onclick="toggleServiceDetail(this)">
+                    Ver más <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="service-detail">
+                    <p>Soluciones integrales para optimizar su infraestructura tecnológica con las mejores prácticas del mercado.</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Canales dedicados de internet (fibra óptica, radio enlace, satelital)</li>
+                        <li><i class="fas fa-check"></i> Creación de portales web y sistemas de información</li>
+                        <li><i class="fas fa-check"></i> Servicios de outsourcing en informática</li>
+                        <li><i class="fas fa-check"></i> Consultoría y asesoría informática especializada</li>
+                    </ul>
+                    <a href="{% url 'services:service_list' %}" class="btn btn-primary btn-sm">Más información</a>
+                </div>
+            </div>
+
+            <!-- Servicio 2: Seguridad -->
+            <div class="service-card" data-service="seguridad">
+                <div class="service-card-header">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Seguridad</h3>
+                </div>
+                <p class="service-short-desc">Gestión integral de la seguridad con profesionales certificados en ISO 27001:2005, redes seguras y administración de bases de datos y servidores bajo los más altos estándares de protección.</p>
+                <button class="btn-expand" onclick="toggleServiceDetail(this)">
+                    Ver más <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="service-detail">
+                    <p>Protección integral de sus activos digitales con soluciones de ciberseguridad avanzadas y auditorías especializadas.</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Gestión de la seguridad de la información (ISO 27001:2005)</li>
+                        <li><i class="fas fa-check"></i> Implementación de redes alámbricas e inalámbricas</li>
+                        <li><i class="fas fa-check"></i> Administración y diseño de bases de datos</li>
+                        <li><i class="fas fa-check"></i> Administración de servidores Windows y Linux</li>
+                    </ul>
+                    <a href="{% url 'services:service_list' %}" class="btn btn-primary btn-sm">Más información</a>
+                </div>
+            </div>
+
+            <!-- Servicio 3: Mantenimiento y Soporte -->
+            <div class="service-card" data-service="mantenimiento">
+                <div class="service-card-header">
+                    <div class="service-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <h3>Mantenimiento y Soporte</h3>
+                </div>
+                <p class="service-short-desc">Mantenimiento predictivo, preventivo y correctivo, consultoría gerencial, arrendamiento de equipos y sistemas de seguridad empresarial con tecnología IP de vanguardia.</p>
+                <button class="btn-expand" onclick="toggleServiceDetail(this)">
+                    Ver más <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="service-detail">
+                    <p>Soporte técnico especializado 24/7 para garantizar el funcionamiento óptimo de su infraestructura tecnológica.</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Mantenimiento predictivo, preventivo y correctivo</li>
+                        <li><i class="fas fa-check"></i> Consultoría y asesoría gerencial</li>
+                        <li><i class="fas fa-check"></i> Arrendamiento de equipos de cómputo</li>
+                        <li><i class="fas fa-check"></i> Sistemas de seguridad empresarial (cámaras IP, control de acceso)</li>
+                    </ul>
+                    <a href="{% url 'services:service_list' %}" class="btn btn-primary btn-sm">Más información</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
      CLIENTES
      ========================================== -->
 <section class="clients" id="clientes">
@@ -96,38 +223,138 @@
         </p>
 
         <!-- Carrusel de clientes -->
-        {% if clients %}
         <div class="logos-carousel-wrapper">
             <div class="logos-carousel">
                 <div class="logos-track">
-                    {% for client in clients %}
-                    <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="carousel-image">
-                    {% endfor %}
-                    {% for client in clients %}
-                    <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="carousel-image">
-                    {% endfor %}
+                    <img src="{% static 'img/clientes1.png' %}" alt="Cliente 1" class="carousel-image">
+                    <img src="{% static 'img/clientes2.png' %}" alt="Cliente 2" class="carousel-image">
+                    <img src="{% static 'img/clientes3.png' %}" alt="Cliente 3" class="carousel-image">
+                    <img src="{% static 'img/clientes4.png' %}" alt="Cliente 4" class="carousel-image">
+                    <img src="{% static 'img/clientes5.png' %}" alt="Cliente 5" class="carousel-image">
+                    <img src="{% static 'img/clientes6.png' %}" alt="Cliente 6" class="carousel-image">
+                    <img src="{% static 'img/clientes7.png' %}" alt="Cliente 7" class="carousel-image">
+                    <img src="{% static 'img/clientes8.png' %}" alt="Cliente 8" class="carousel-image">
+                    <img src="{% static 'img/clientes9.png' %}" alt="Cliente 9" class="carousel-image">
+                    <img src="{% static 'img/clientes10.png' %}" alt="Cliente 10" class="carousel-image">
+                    <img src="{% static 'img/clientes11.png' %}" alt="Cliente 11" class="carousel-image">
+                    <img src="{% static 'img/clientes12.png' %}" alt="Cliente 12" class="carousel-image">
+                    <img src="{% static 'img/clientes13.png' %}" alt="Cliente 13" class="carousel-image">
+                    <img src="{% static 'img/clientes14.png' %}" alt="Cliente 14" class="carousel-image">
+                    <!-- Duplicar para efecto infinito -->
+                    <img src="{% static 'img/clientes1.png' %}" alt="Cliente 1" class="carousel-image">
+                    <img src="{% static 'img/clientes2.png' %}" alt="Cliente 2" class="carousel-image">
+                    <img src="{% static 'img/clientes3.png' %}" alt="Cliente 3" class="carousel-image">
+                    <img src="{% static 'img/clientes4.png' %}" alt="Cliente 4" class="carousel-image">
+                    <img src="{% static 'img/clientes5.png' %}" alt="Cliente 5" class="carousel-image">
+                    <img src="{% static 'img/clientes6.png' %}" alt="Cliente 6" class="carousel-image">
+                    <img src="{% static 'img/clientes7.png' %}" alt="Cliente 7" class="carousel-image">
+                    <img src="{% static 'img/clientes8.png' %}" alt="Cliente 8" class="carousel-image">
+                    <img src="{% static 'img/clientes9.png' %}" alt="Cliente 9" class="carousel-image">
+                    <img src="{% static 'img/clientes10.png' %}" alt="Cliente 10" class="carousel-image">
+                    <img src="{% static 'img/clientes11.png' %}" alt="Cliente 11" class="carousel-image">
+                    <img src="{% static 'img/clientes12.png' %}" alt="Cliente 12" class="carousel-image">
+                    <img src="{% static 'img/clientes13.png' %}" alt="Cliente 13" class="carousel-image">
+                    <img src="{% static 'img/clientes14.png' %}" alt="Cliente 14" class="carousel-image">
                 </div>
             </div>
         </div>
-        {% endif %}
 
         <!-- Carrusel de marcas -->
         <h3 class="brands-title">Nuestras Marcas</h3>
-        {% if brands %}
         <div class="logos-carousel-wrapper">
             <div class="logos-carousel">
                 <div class="logos-track logos-track-reverse">
-                    {% for brand in brands %}
-                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="carousel-image">
-                    {% endfor %}
+                    <img src="{% static 'img/Marcas1.png' %}" alt="Marca 1" class="carousel-image">
+                    <img src="{% static 'img/Marcas2.png' %}" alt="Marca 2" class="carousel-image">
+                    <img src="{% static 'img/Marcas3.png' %}" alt="Marca 3" class="carousel-image">
+                    <img src="{% static 'img/Marcas4.png' %}" alt="Marca 4" class="carousel-image">
+                    <img src="{% static 'img/Marcas5.png' %}" alt="Marca 5" class="carousel-image">
+                    <img src="{% static 'img/Marcas6.png' %}" alt="Marca 6" class="carousel-image">
+                    <img src="{% static 'img/Marcas7.png' %}" alt="Marca 7" class="carousel-image">
+                    <img src="{% static 'img/Marcas8.png' %}" alt="Marca 8" class="carousel-image">
+                    <img src="{% static 'img/Marcas9.png' %}" alt="Marca 9" class="carousel-image">
+                    <img src="{% static 'img/Marcas10.png' %}" alt="Marca 10" class="carousel-image">
+                    <img src="{% static 'img/Marcas11.png' %}" alt="Marca 11" class="carousel-image">
+                    <img src="{% static 'img/Marcas12.png' %}" alt="Marca 12" class="carousel-image">
+                    <img src="{% static 'img/Marcas13.png' %}" alt="Marca 13" class="carousel-image">
+                    <img src="{% static 'img/Marcas14.png' %}" alt="Marca 14" class="carousel-image">
+                    <img src="{% static 'img/Marcas15.png' %}" alt="Marca 15" class="carousel-image">
+                    <img src="{% static 'img/Marcas16.png' %}" alt="Marca 16" class="carousel-image">
+                    <img src="{% static 'img/Marcas17.png' %}" alt="Marca 17" class="carousel-image">
+                    <img src="{% static 'img/Marcas18.png' %}" alt="Marca 18" class="carousel-image">
+                    <img src="{% static 'img/Marcas19.png' %}" alt="Marca 19" class="carousel-image">
+                    <img src="{% static 'img/Marcas20.png' %}" alt="Marca 20" class="carousel-image">
+                    <img src="{% static 'img/Marcas21.png' %}" alt="Marca 21" class="carousel-image">
+                    <img src="{% static 'img/Marcas22.png' %}" alt="Marca 22" class="carousel-image">
+                    <img src="{% static 'img/Marcas23.png' %}" alt="Marca 23" class="carousel-image">
+                    <img src="{% static 'img/Marcas24.png' %}" alt="Marca 24" class="carousel-image">
+                    <img src="{% static 'img/Marcas25.png' %}" alt="Marca 25" class="carousel-image">
+                    <img src="{% static 'img/Marcas26.png' %}" alt="Marca 26" class="carousel-image">
+                    <img src="{% static 'img/Marcas27.png' %}" alt="Marca 27" class="carousel-image">
+                    <img src="{% static 'img/Marcas28.png' %}" alt="Marca 28" class="carousel-image">
+                    <img src="{% static 'img/Marcas29.png' %}" alt="Marca 29" class="carousel-image">
+                    <!-- Duplicar para efecto infinito -->
+                    <img src="{% static 'img/Marcas1.png' %}" alt="Marca 1" class="carousel-image">
+                    <img src="{% static 'img/Marcas2.png' %}" alt="Marca 2" class="carousel-image">
+                    <img src="{% static 'img/Marcas3.png' %}" alt="Marca 3" class="carousel-image">
+                    <img src="{% static 'img/Marcas4.png' %}" alt="Marca 4" class="carousel-image">
+                    <img src="{% static 'img/Marcas5.png' %}" alt="Marca 5" class="carousel-image">
+                    <img src="{% static 'img/Marcas6.png' %}" alt="Marca 6" class="carousel-image">
+                    <img src="{% static 'img/Marcas7.png' %}" alt="Marca 7" class="carousel-image">
+                    <img src="{% static 'img/Marcas8.png' %}" alt="Marca 8" class="carousel-image">
+                    <img src="{% static 'img/Marcas9.png' %}" alt="Marca 9" class="carousel-image">
+                    <img src="{% static 'img/Marcas10.png' %}" alt="Marca 10" class="carousel-image">
+                    <img src="{% static 'img/Marcas11.png' %}" alt="Marca 11" class="carousel-image">
+                    <img src="{% static 'img/Marcas12.png' %}" alt="Marca 12" class="carousel-image">
+                    <img src="{% static 'img/Marcas13.png' %}" alt="Marca 13" class="carousel-image">
+                    <img src="{% static 'img/Marcas14.png' %}" alt="Marca 14" class="carousel-image">
+                    <img src="{% static 'img/Marcas15.png' %}" alt="Marca 15" class="carousel-image">
+                    <img src="{% static 'img/Marcas16.png' %}" alt="Marca 16" class="carousel-image">
+                    <img src="{% static 'img/Marcas17.png' %}" alt="Marca 17" class="carousel-image">
+                    <img src="{% static 'img/Marcas18.png' %}" alt="Marca 18" class="carousel-image">
+                    <img src="{% static 'img/Marcas19.png' %}" alt="Marca 19" class="carousel-image">
+                    <img src="{% static 'img/Marcas20.png' %}" alt="Marca 20" class="carousel-image">
+                    <img src="{% static 'img/Marcas21.png' %}" alt="Marca 21" class="carousel-image">
+                    <img src="{% static 'img/Marcas22.png' %}" alt="Marca 22" class="carousel-image">
+                    <img src="{% static 'img/Marcas23.png' %}" alt="Marca 23" class="carousel-image">
+                    <img src="{% static 'img/Marcas24.png' %}" alt="Marca 24" class="carousel-image">
+                    <img src="{% static 'img/Marcas25.png' %}" alt="Marca 25" class="carousel-image">
+                    <img src="{% static 'img/Marcas26.png' %}" alt="Marca 26" class="carousel-image">
+                    <img src="{% static 'img/Marcas27.png' %}" alt="Marca 27" class="carousel-image">
+                    <img src="{% static 'img/Marcas28.png' %}" alt="Marca 28" class="carousel-image">
+                    <img src="{% static 'img/Marcas29.png' %}" alt="Marca 29" class="carousel-image">
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
 </section>
 {% endblock %}
 
 {% block extra_js %}
+<script>
+// Función para expandir/contraer detalles del servicio
+function toggleServiceDetail(button) {
+    const card = button.closest('.service-card');
+    const wasExpanded = card.classList.contains('expanded');
+
+    // Cerrar todas las demás cards
+    document.querySelectorAll('.service-card.expanded').forEach(c => {
+        if (c !== card) {
+            c.classList.remove('expanded');
+            const btn = c.querySelector('.btn-expand');
+            btn.innerHTML = 'Ver más <i class="fas fa-chevron-down"></i>';
+        }
+    });
+
+    // Toggle la card actual
+    if (wasExpanded) {
+        card.classList.remove('expanded');
+        button.innerHTML = 'Ver más <i class="fas fa-chevron-down"></i>';
+    } else {
+        card.classList.add('expanded');
+        button.innerHTML = 'Ver menos <i class="fas fa-chevron-down"></i>';
+    }
+}
+</script>
 <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

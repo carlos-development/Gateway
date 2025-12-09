@@ -23,16 +23,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'django.contrib.humanize',  # Para formateo de números (intcomma)
+
     #? Apps propias
     'apps.core',
     'apps.services',
     'apps.products',
     'apps.contact',
-    
+    'apps.accounts',
+    'apps.payments',
+
     #? Third party apps
     'rest_framework',
 ]
+
+#* Custom User Model
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -124,3 +130,39 @@ CELERY_TIMEZONE = TIME_ZONE
 #* API Mayorista
 WHOLESALER_API_URL = config('WHOLESALER_API_URL', default='')
 WHOLESALER_API_KEY = config('WHOLESALER_API_KEY', default='')
+
+#* Configuración de Autenticación
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_REDIRECT_URL = 'core:home'
+
+#* Configuración de Sesión
+SESSION_COOKIE_AGE = 1209600  # 2 semanas
+SESSION_SAVE_EVERY_REQUEST = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = not DEBUG  # True en producción
+
+#* Configuración de Seguridad para Producción
+if not DEBUG:
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+#* Configuración Pillow para imágenes
+# Pillow ya está instalado como dependencia de Django para ImageField
+
+#* Wompi Payment Gateway Configuration
+# Llaves de prueba oficiales de Wompi (Sandbox)
+# IMPORTANTE: Cambiar estas llaves en producción usando variables de entorno
+config('EMAIL_HOST')
+WOMPI_PUBLIC_KEY = config('WOMPI_PUBLIC_KEY')
+WOMPI_PRIVATE_KEY = config('WOMPI_PRIVATE_KEY')
+WOMPI_INTEGRITY_KEY = config('WOMPI_INTEGRITY_KEY')
+WOMPI_ENVIRONMENT = config('WOMPI_ENVIRONMENT')  # sandbox or production
+WOMPI_API_BASE_URL = 'https://sandbox.wompi.co/v1' if WOMPI_ENVIRONMENT == 'sandbox' else 'https://production.wompi.co/v1'
+WOMPI_EVENTS_SECRET = config('WOMPI_EVENTS_SECRET')

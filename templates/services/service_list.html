@@ -8,10 +8,14 @@
     /* ==========================================
        SECCIÓN SERVICIOS
        ========================================== */
-    .services {
-        padding: 8rem 2rem 4rem;
+    .services-page {
+        padding: 4rem 2rem 4rem;
         background: var(--light-bg);
         min-height: 100vh;
+    }
+
+    body.dark-mode .services-page {
+        background: var(--dark-bg);
     }
 
     .section-container {
@@ -28,6 +32,7 @@
         display: inline-block;
         left: 50%;
         transform: translateX(-50%);
+        color: var(--text-dark);
     }
 
     .section-title::after {
@@ -46,7 +51,7 @@
         text-align: center;
         font-size: 1.2rem;
         color: var(--text-gray);
-        margin-bottom: 4rem;
+        margin-bottom: 3rem;
     }
 
     /* ==========================================
@@ -55,62 +60,77 @@
     .service-tabs {
         display: flex;
         justify-content: center;
-        gap: 1.5rem;
+        gap: 1rem;
         margin: 3rem 0;
         flex-wrap: wrap;
+        border-bottom: 2px solid rgba(245, 134, 53, 0.1);
+        padding-bottom: 0;
     }
 
     .service-tab {
-        padding: 1.5rem 2.5rem;
-        background: white;
-        border: 2px solid rgba(245, 134, 53, 0.2);
-        border-radius: 15px;
+        padding: 1.2rem 2rem;
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
         cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.8rem;
-        min-width: 200px;
-        box-shadow: var(--shadow-card);
+        gap: 0.5rem;
+        min-width: 180px;
         text-decoration: none;
-        color: var(--text-dark);
+        color: var(--text-gray);
+        font-weight: 600;
+        position: relative;
+        bottom: -2px;
     }
 
     .service-tab:hover {
-        transform: translateY(-5px);
-        border-color: var(--primary-color);
-        box-shadow: 0 10px 30px rgba(245, 134, 53, 0.2);
+        color: var(--primary-color);
+        background: rgba(245, 134, 53, 0.05);
     }
 
     .service-tab.active {
-        background: var(--gradient-primary);
-        color: white;
-        border-color: var(--primary-color);
-        box-shadow: 0 10px 30px rgba(245, 134, 53, 0.3);
-        transform: translateY(-5px);
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+        background: rgba(245, 134, 53, 0.05);
     }
 
     .service-tab i {
-        font-size: 2.5rem;
-        color: var(--primary-color);
+        font-size: 2rem;
         transition: all 0.3s;
     }
 
     .service-tab.active i {
-        color: white;
         transform: scale(1.1);
     }
 
-    .service-tab span {
-        font-weight: 600;
-        font-size: 1rem;
-        text-align: center;
-        transition: color 0.3s;
+    /* ==========================================
+       CONTENEDOR DE TABS
+       ========================================== */
+    .tab-content {
+        margin-top: 3rem;
     }
 
-    .service-tab.active span {
-        color: white;
+    .tab-pane {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* ==========================================
@@ -118,153 +138,153 @@
        ========================================== */
     .services-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2.5rem;
-        margin-top: 3rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
     }
 
     .service-card {
         background: var(--light-card);
         border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.3s;
-        border: 1px solid rgba(245, 134, 53, 0.15);
-        cursor: pointer;
+        padding: 2rem;
+        border: 2px solid rgba(245, 134, 53, 0.1);
         box-shadow: var(--shadow-card);
-        text-decoration: none;
-        color: inherit;
-        display: block;
-    }
-
-    .service-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(245, 134, 53, 0.15);
-        border-color: var(--primary-color);
-    }
-
-    .service-image {
-        width: 100%;
-        height: 250px;
-        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: var(--primary-color);
+        transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
-    .service-image::before {
+    body.dark-mode .service-card {
+        background: var(--dark-card);
+        border-color: rgba(245, 134, 53, 0.2);
+    }
+
+    .service-card::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(245, 134, 53, 0.03) 0%, transparent 100%);
-    }
-
-    .service-image img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: 5px;
+        background: var(--gradient-primary);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
     }
 
-    .service-image i {
-        z-index: 1;
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(245, 134, 53, 0.2);
+        border-color: var(--primary-color);
     }
 
-    .service-content {
-        padding: 2rem;
+    .service-card:hover::before {
+        transform: scaleX(1);
     }
 
-    .service-category-badge {
-        display: inline-block;
-        padding: 0.3rem 0.8rem;
-        background: rgba(245, 134, 53, 0.1);
-        color: var(--primary-color);
+    .service-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--gradient-primary);
         border-radius: 15px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-bottom: 0.8rem;
-    }
-
-    .service-content h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: var(--primary-color);
-    }
-
-    .service-content p {
-        color: var(--text-gray);
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-    }
-
-    .service-link {
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 600;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 0.5rem;
-        transition: gap 0.3s;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(245, 134, 53, 0.3);
     }
 
-    .service-link:hover {
-        gap: 1rem;
-    }
-
-    /* ==========================================
-       NO HAY SERVICIOS
-       ========================================== */
-    .no-services {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: var(--text-gray);
-    }
-
-    .no-services i {
-        font-size: 4rem;
+    .service-card h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text-dark);
         margin-bottom: 1rem;
-        opacity: 0.3;
+        line-height: 1.3;
+    }
+
+    .service-card p {
+        color: var(--text-gray);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .service-features {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+
+    .service-features li {
+        padding: 0.4rem 0;
+        color: var(--text-gray);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
+    }
+
+    .service-features li i {
+        color: var(--primary-color);
+        margin-top: 0.3rem;
+        flex-shrink: 0;
     }
 
     /* ==========================================
        RESPONSIVE
        ========================================== */
     @media (max-width: 968px) {
+        .services-page {
+            padding: 6rem 1.5rem 3rem;
+        }
+
         .services-grid {
             grid-template-columns: 1fr;
+            gap: 1.5rem;
         }
 
         .service-tabs {
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         .service-tab {
-            min-width: 150px;
-            padding: 1.2rem 1.5rem;
+            min-width: 140px;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
         }
 
         .service-tab i {
-            font-size: 2rem;
-        }
-
-        .service-tab span {
-            font-size: 0.9rem;
+            font-size: 1.5rem;
         }
     }
 
     @media (max-width: 600px) {
+        .section-title {
+            font-size: 2rem;
+        }
+
         .service-tabs {
             flex-direction: column;
-            align-items: stretch;
+            border-bottom: none;
         }
 
         .service-tab {
-            min-width: auto;
+            width: 100%;
+            border-bottom: 2px solid rgba(245, 134, 53, 0.1);
+            border-left: 3px solid transparent;
+        }
+
+        .service-tab.active {
+            border-bottom-color: rgba(245, 134, 53, 0.1);
+            border-left-color: var(--primary-color);
+        }
+
+        .service-card {
+            padding: 1.5rem;
         }
     }
 </style>
@@ -274,65 +294,251 @@
 <!-- ==========================================
      SECCIÓN SERVICIOS
      ========================================== -->
-<section class="services" id="servicios">
+<section class="services-page" id="servicios">
     <div class="section-container">
         <h2 class="section-title">Nuestros Servicios</h2>
         <p class="section-subtitle">Soluciones integrales para todas sus necesidades tecnológicas</p>
 
         <!-- Tabs de Categorías -->
-        <div class="service-tabs">
-            <a href="{% url 'services:service_list' %}" 
-               class="service-tab {% if not selected_category %}active{% endif %}">
-                <i class="fas fa-th"></i>
-                <span>Todos los Servicios</span>
-            </a>
-            {% for category in categories %}
-            <a href="{% url 'services:filter_by_category' category.slug %}" 
-               class="service-tab {% if selected_category.id == category.id %}active{% endif %}">
-                <i class="{{ category.icon }}"></i>
-                <span>{{ category.name }}</span>
-            </a>
-            {% endfor %}
+        <div class="service-tabs" role="tablist">
+            <button class="service-tab active" data-tab="infraestructura" role="tab">
+                <i class="fas fa-network-wired"></i>
+                <span>Red e Infraestructura</span>
+            </button>
+            <button class="service-tab" data-tab="seguridad" role="tab">
+                <i class="fas fa-shield-alt"></i>
+                <span>Seguridad</span>
+            </button>
+            <button class="service-tab" data-tab="mantenimiento" role="tab">
+                <i class="fas fa-wrench"></i>
+                <span>Mantenimiento y Soporte</span>
+            </button>
         </div>
 
-        <!-- Grid de Servicios -->
-        {% if services %}
-        <div class="services-grid">
-            {% for service in services %}
-            <a href="{% url 'services:service_detail' service.id %}" class="service-card">
-                <!-- Imagen del servicio -->
-                <div class="service-image">
-                    {% if service.image %}
-                        <img src="{{ service.image.url }}" alt="{{ service.name }}">
-                    {% else %}
-                        <i class="{{ service.category.icon }}"></i>
-                    {% endif %}
-                </div>
+        <!-- Contenido de Tabs -->
+        <div class="tab-content">
+            <!-- TAB 1: RED E INFRAESTRUCTURA -->
+            <div class="tab-pane active" id="infraestructura" role="tabpanel">
+                <div class="services-grid">
+                    <!-- Servicio 1: Canales dedicados internet -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <h3>Canales Dedicados Internet</h3>
+                        <p>Implementamos canales dedicados de internet con tecnología de punta:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Fibra óptica de alta velocidad</li>
+                            <li><i class="fas fa-check-circle"></i> Radio enlace profesional</li>
+                            <li><i class="fas fa-check-circle"></i> Conexión satelital</li>
+                            <li><i class="fas fa-check-circle"></i> Equipos corporativos de alto rendimiento</li>
+                            <li><i class="fas fa-check-circle"></i> Soluciones de alta disponibilidad</li>
+                            <li><i class="fas fa-check-circle"></i> Permisos y certificaciones obligatorias</li>
+                        </ul>
+                    </div>
 
-                <!-- Contenido del servicio -->
-                <div class="service-content">
-                    <span class="service-category-badge">
-                        <i class="{{ service.category.icon }}"></i> {{ service.category.name }}
-                    </span>
-                    <h3>{{ service.name }}</h3>
-                    <p>{{ service.description|truncatewords:20 }}</p>
-                    <span class="service-link">
-                        Ver más <i class="fas fa-arrow-right"></i>
-                    </span>
+                    <!-- Servicio 2: Creación de portales web -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Creación de Portales Web y Sistemas de Información</h3>
+                        <p>Diseñamos y desarrollamos soluciones web personalizadas:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Diseño web moderno y responsive</li>
+                            <li><i class="fas fa-check-circle"></i> Administración de sitios web</li>
+                            <li><i class="fas fa-check-circle"></i> Sistemas de información a medida</li>
+                            <li><i class="fas fa-check-circle"></i> Aplicaciones stand alone y web</li>
+                            <li><i class="fas fa-check-circle"></i> Optimización de tecnologías online</li>
+                            <li><i class="fas fa-check-circle"></i> Desarrollo enfocado en su Core de negocio</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 3: Outsourcing -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3>Servicios de Outsourcing en Informática</h3>
+                        <p>Enfóquese en su negocio mientras nosotros gestionamos su TI:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Administración de sistemas distribuidos</li>
+                            <li><i class="fas fa-check-circle"></i> Gestión de infraestructura tecnológica</li>
+                            <li><i class="fas fa-check-circle"></i> Soporte de aplicaciones empresariales</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenimiento preventivo y correctivo</li>
+                            <li><i class="fas fa-check-circle"></i> Reducción de costos operativos</li>
+                            <li><i class="fas fa-check-circle"></i> Enfoque total en su Core de negocio</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 4: Consultoría -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>Consultoría y Asesoría Informática</h3>
+                        <p>Las áreas en las que podemos apoyar a nuestros clientes son:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Gestión estratégica de sistemas de información y recursos informáticos</li>
+                            <li><i class="fas fa-check-circle"></i> Inteligencia de Negocios (BI)</li>
+                            <li><i class="fas fa-check-circle"></i> Gestión de procesos de negocios (BPM)</li>
+                            <li><i class="fas fa-check-circle"></i> Virtualización de servicios</li>
+                            <li><i class="fas fa-check-circle"></i> Servicios en la nube</li>
+                            <li><i class="fas fa-check-circle"></i> Arquitectura de Software</li>
+                            <li><i class="fas fa-check-circle"></i> Gerencia de Proyectos</li>
+                            <li><i class="fas fa-check-circle"></i> Hacking Ético</li>
+                        </ul>
+                    </div>
                 </div>
-            </a>
-            {% endfor %}
+            </div>
+
+            <!-- TAB 2: SEGURIDAD -->
+            <div class="tab-pane" id="seguridad" role="tabpanel">
+                <div class="services-grid">
+                    <!-- Servicio 1: Gestión de seguridad -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Gestión de la Seguridad de la Información</h3>
+                        <p>Gateway-IT cuenta con profesionales certificados como auditores internos en ISO 27001:2005, capaces de asesorar a nuestros clientes en la seguridad de su información.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Gestión de riesgos</li>
+                            <li><i class="fas fa-check-circle"></i> Análisis de seguridad</li>
+                            <li><i class="fas fa-check-circle"></i> Control de acceso</li>
+                            <li><i class="fas fa-check-circle"></i> Políticas de seguridad</li>
+                            <li><i class="fas fa-check-circle"></i> Incidentes de seguridad</li>
+                            <li><i class="fas fa-check-circle"></i> Protección</li>
+                            <li><i class="fas fa-check-circle"></i> Auditoría de Sistemas</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 2: Implementación de redes -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3>Implementación de Redes</h3>
+                        <p>Soluciones completas de infraestructura de red:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Redes alámbricas e inalámbricas</li>
+                            <li><i class="fas fa-check-circle"></i> Configuración y montaje profesional</li>
+                            <li><i class="fas fa-check-circle"></i> Diseño de topología de red</li>
+                            <li><i class="fas fa-check-circle"></i> Cumplimiento de normas y estándares</li>
+                            <li><i class="fas fa-check-circle"></i> Estructura cableada certificada</li>
+                            <li><i class="fas fa-check-circle"></i> Garantía de conectividad</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 3: Bases de datos -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Administración y Diseño de Bases de Datos</h3>
+                        <p>Gestión integral de datos empresariales:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Análisis y diseño de bases de datos</li>
+                            <li><i class="fas fa-check-circle"></i> Construcción e implementación</li>
+                            <li><i class="fas fa-check-circle"></i> Administración y mantenimiento</li>
+                            <li><i class="fas fa-check-circle"></i> Organización y recopilación de datos</li>
+                            <li><i class="fas fa-check-circle"></i> Optimización de consultas</li>
+                            <li><i class="fas fa-check-circle"></i> Backup y recuperación</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 4: Servidores -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3>Administración de Servidores</h3>
+                        <p>Configuración y gestión de servidores empresariales:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Servidores Windows y Linux</li>
+                            <li><i class="fas fa-check-circle"></i> Implementación de DNS</li>
+                            <li><i class="fas fa-check-circle"></i> Servidor de correo corporativo</li>
+                            <li><i class="fas fa-check-circle"></i> VPN y conexiones seguras</li>
+                            <li><i class="fas fa-check-circle"></i> Proxy y Firewall</li>
+                            <li><i class="fas fa-check-circle"></i> Soluciones NAS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: MANTENIMIENTO Y SOPORTE -->
+            <div class="tab-pane" id="mantenimiento" role="tabpanel">
+                <div class="services-grid">
+                    <!-- Servicio 1: Mantenimiento -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>Mantenimiento y Soporte</h3>
+                        <p>Servicio técnico integral para su infraestructura:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Soporte técnico oportuno</li>
+                            <li><i class="fas fa-check-circle"></i> Reparación de hardware y software</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenimiento predictivo</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenimiento preventivo</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenimiento correctivo</li>
+                            <li><i class="fas fa-check-circle"></i> Configuración de equipos</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 2: Consultoría gerencial -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Consultoría y Asesoría Gerencial</h3>
+                        <p>Apoyo estratégico para la alta gerencia:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Gestión del cambio tecnológico</li>
+                            <li><i class="fas fa-check-circle"></i> Optimización de procesos</li>
+                            <li><i class="fas fa-check-circle"></i> Procedimientos eficaces y eficientes</li>
+                            <li><i class="fas fa-check-circle"></i> Especialistas calificados</li>
+                            <li><i class="fas fa-check-circle"></i> Mejora continua</li>
+                            <li><i class="fas fa-check-circle"></i> Asesoría estratégica TI</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 3: Arrendamiento -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <h3>Arrendamiento de Equipos de Cómputo y Venta de Suministros</h3>
+                        <p>Equipos y suministros para su empresa:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Arrendamiento de equipos de escritorio</li>
+                            <li><i class="fas fa-check-circle"></i> Arrendamiento de portátiles</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenimiento preventivo incluido</li>
+                            <li><i class="fas fa-check-circle"></i> Visitas de soporte técnico</li>
+                            <li><i class="fas fa-check-circle"></i> Venta de equipos de marca</li>
+                            <li><i class="fas fa-check-circle"></i> Suministro de partes y periféricos</li>
+                        </ul>
+                    </div>
+
+                    <!-- Servicio 4: Sistemas de seguridad -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Sistemas de Seguridad Empresarial</h3>
+                        <p>Soluciones integrales de seguridad física:</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Cámaras de seguridad IP</li>
+                            <li><i class="fas fa-check-circle"></i> Control de acceso biométrico</li>
+                            <li><i class="fas fa-check-circle"></i> Puertas magnéticas y automáticas</li>
+                            <li><i class="fas fa-check-circle"></i> Video portero</li>
+                            <li><i class="fas fa-check-circle"></i> Plantas telefónicas IP</li>
+                            <li><i class="fas fa-check-circle"></i> Sistemas UPS de alta capacidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% else %}
-        <!-- Mensaje cuando no hay servicios -->
-        <div class="no-services">
-            <i class="fas fa-tools"></i>
-            <p>No hay servicios disponibles en esta categoría.</p>
-            <a href="{% url 'services:service_list' %}" style="color: var(--primary-color); text-decoration: none; font-weight: 600; margin-top: 1rem; display: inline-block;">
-                Ver todos los servicios
-            </a>
-        </div>
-        {% endif %}
     </div>
 </section>
 {% endblock %}
@@ -340,36 +546,70 @@
 {% block extra_js %}
 <script>
     // ==========================================
-    // ANIMACIONES DE SCROLL
+    // TABS FUNCTIONALITY
     // ==========================================
-    function revealOnScroll() {
-        const cards = document.querySelectorAll('.service-card');
-        
-        cards.forEach((card, index) => {
-            const cardTop = card.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            
-            if (cardTop < windowHeight - 100) {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            }
-        });
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.service-tab');
+        const panes = document.querySelectorAll('.tab-pane');
 
-    // Inicializar animación
-    document.addEventListener('DOMContentLoaded', () => {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
+
+                // Remove active class from all tabs and panes
+                tabs.forEach(t => t.classList.remove('active'));
+                panes.forEach(p => p.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding pane
+                this.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+
+                // Scroll smoothly to content
+                document.getElementById(targetTab).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            });
+        });
+
+        // ==========================================
+        // ANIMACIONES DE SCROLL
+        // ==========================================
+        function revealOnScroll() {
+            const cards = document.querySelectorAll('.service-card');
+
+            cards.forEach((card, index) => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (cardTop < windowHeight - 100) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 50);
+                }
+            });
+        }
+
+        // Inicializar animación
         const cards = document.querySelectorAll('.service-card');
         cards.forEach(card => {
             card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
+            card.style.transform = 'translateY(30px)';
             card.style.transition = 'all 0.6s ease';
         });
-        
-        revealOnScroll();
-    });
 
-    window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+        window.addEventListener('scroll', revealOnScroll);
+
+        // Re-trigger animation when changing tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                setTimeout(() => {
+                    revealOnScroll();
+                }, 100);
+            });
+        });
+    });
 </script>
 {% endblock %}

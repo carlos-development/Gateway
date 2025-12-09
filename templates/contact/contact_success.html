@@ -1,11 +1,257 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .contact-status-container {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 0 20px;
+        min-height: calc(100vh - 300px);
+        display: flex;
+        align-items: center;
+    }
+
+    .status-card {
+        background: var(--light-card);
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: var(--shadow-card);
+        text-align: center;
+        width: 100%;
+        transition: var(--transition-base);
+    }
+
+    body.dark-mode .status-card {
+        background: var(--dark-secondary);
+    }
+
+    .status-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+        color: white;
+        animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .status-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 15px;
+    }
+
+    .status-message {
+        font-size: 1.1rem;
+        color: var(--text-gray);
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .info-box {
+        background: var(--light-secondary);
+        border-left: 4px solid var(--primary-color);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 30px 0;
+        text-align: left;
+    }
+
+    body.dark-mode .info-box {
+        background: var(--dark-bg);
+    }
+
+    .info-box h3 {
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        margin-bottom: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .info-box h3 i {
+        color: var(--primary-color);
+    }
+
+    .info-box p {
+        color: var(--text-gray);
+        margin: 8px 0;
+        line-height: 1.6;
+    }
+
+    .info-box ul {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+
+    .info-box ul li {
+        color: var(--text-gray);
+        margin: 8px 0;
+        line-height: 1.6;
+    }
+
+    .email-confirmation {
+        background: #e8f5e9;
+        border-left: 4px solid #4CAF50;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    body.dark-mode .email-confirmation {
+        background: rgba(76, 175, 80, 0.1);
+        border-left-color: #66BB6A;
+    }
+
+    .email-confirmation i {
+        color: #4CAF50;
+        font-size: 1.3rem;
+    }
+
+    .email-confirmation p {
+        margin: 0;
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    body.dark-mode .email-confirmation p {
+        color: #66BB6A;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+    }
+
+    .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 134, 53, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--light-card);
+        color: var(--text-dark);
+        border: 2px solid var(--text-gray);
+    }
+
+    .btn-secondary:hover {
+        border-color: var(--primary-color);
+        color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+        .contact-status-container {
+            margin: 30px auto;
+        }
+
+        .status-card {
+            padding: 40px 25px;
+        }
+
+        .status-title {
+            font-size: 1.6rem;
+        }
+
+        .status-message {
+            font-size: 1rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block title %}Mensaje Enviado - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>¡Gracias por contactarnos!</h1>
-    <p>Hemos recibido tu mensaje y te responderemos a la brevedad posible.</p>
-    <a href="{% url 'home' %}" class="btn btn-primary">Volver al Inicio</a>
+<div class="contact-status-container">
+    <div class="status-card">
+        <div class="status-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+
+        <h1 class="status-title">¡Gracias por contactarnos!</h1>
+        <p class="status-message">
+            Hemos recibido tu mensaje correctamente y nuestro equipo lo está revisando.
+        </p>
+
+        <div class="email-confirmation">
+            <i class="fas fa-envelope-circle-check"></i>
+            <p>Te responderemos a la brevedad posible a tu correo electrónico.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>
+                <i class="fas fa-clock"></i>
+                ¿Qué sigue ahora?
+            </h3>
+            <ul>
+                <li>Nuestro equipo revisará tu mensaje en las próximas horas</li>
+                <li>Te contactaremos directamente por email o teléfono según tu preferencia</li>
+                <li>Tiempo de respuesta estimado: 24-48 horas hábiles</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'core:home' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </a>
+            <a href="{% url 'products:product_list' %}" class="btn btn-secondary">
+                <i class="fas fa-shopping-bag"></i> Ver Productos
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}

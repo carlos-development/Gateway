@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Tienda - Gateway IT{% endblock %}
 
@@ -9,8 +10,8 @@
        SECCIÓN E-COMMERCE / TIENDA
        ========================================== */
     .ecommerce {
-        padding: 8rem 2rem 4rem;
-        background: var(--light-secondary);
+        padding: 4rem 2rem 4rem;
+        background: var(--background);
         min-height: 100vh;
     }
 
@@ -62,10 +63,10 @@
 
     .filter-btn {
         padding: 0.8rem 1.5rem;
-        background: white;
+        background: var(--card-background);
         border: 2px solid rgba(245, 134, 53, 0.2);
         border-radius: 50px;
-        color: var(--text-dark);
+        color: var(--text-color);
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
@@ -121,7 +122,6 @@
     .product-image {
         width: 100%;
         height: 200px;
-        background: linear-gradient(135deg, rgba(245, 134, 53, 0.05) 0%, rgba(245, 134, 53, 0.1) 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -134,7 +134,7 @@
     .product-image img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .product-image i {
@@ -163,7 +163,7 @@
     .product-content h3 {
         font-size: 1.2rem;
         margin-bottom: 0.8rem;
-        color: var(--text-dark);
+        color: var(--text-color);
         min-height: 2.4rem;
     }
 
@@ -188,7 +188,7 @@
         margin-top: auto;
     }
 
-    .add-to-cart {
+    .btn-add-cart {
         flex: 1;
         padding: 0.8rem;
         background: var(--gradient-primary);
@@ -205,7 +205,7 @@
         gap: 0.5rem;
     }
 
-    .add-to-cart:hover {
+    .btn-add-cart:hover {
         transform: scale(1.02);
         box-shadow: 0 5px 20px rgba(245, 134, 53, 0.4);
     }
@@ -270,6 +270,84 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* ==========================================
+       CARRITO FLOTANTE
+       ========================================== */
+    .floating-cart {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 999;
+    }
+
+    .cart-button {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(245, 134, 53, 0.4);
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(245, 134, 53, 0.6);
+    }
+
+    .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #dc3545;
+        color: white;
+        border-radius: 50%;
+        min-width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 2px solid white;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    @media (max-width: 968px) {
+        .floating-cart {
+            bottom: 1.5rem;
+            right: 1.5rem;
+        }
+
+        .cart-button {
+            width: 55px;
+            height: 55px;
+            font-size: 1.3rem;
+        }
+
+        .cart-badge {
+            min-width: 22px;
+            height: 22px;
+            font-size: 0.7rem;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -289,7 +367,7 @@
                 <i class="fas fa-th"></i> Todos
             </a>
             {% for category in categories %}
-            <a href="{% url 'products:filter_by_category' category.slug %}" 
+            <a href="{% url 'products:product_category' category.slug %}"
                class="filter-btn {% if selected_category.id == category.id %}active{% endif %}">
                 <i class="{{ category.icon }}"></i> {{ category.name }}
             </a>
@@ -303,7 +381,9 @@
             <div class="product-card" data-category="{{ product.category.slug }}">
                 <!-- Imagen del producto -->
                 <div class="product-image">
-                    {% if product.image %}
+                    {% if product.primary_image %}
+                        <img src="{{ product.primary_image }}" alt="{{ product.name }}">
+                    {% elif product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
                     {% else %}
                         <i class="{{ product.category.icon }}"></i>
@@ -314,18 +394,20 @@
                 <div class="product-content">
                     <span class="product-category">{{ product.category.name }}</span>
                     <h3>{{ product.name }}</h3>
-                    <p>{{ product.description|truncatewords:15 }}</p>
-                    <div class="product-price">${{ product.price|floatformat:0 }}</div>
-                    
+                    <p>{{ product.short_description|truncatewords:15 }}</p>
+                    <div class="product-price">${{ product.final_price|floatformat:0|intcomma }}</div>
+
                     <!-- Acciones -->
                     <div class="product-actions">
                         <form method="POST" action="{% url 'products:add_to_cart' product.id %}" style="flex: 1;">
                             {% csrf_token %}
-                            <button type="submit" class="add-to-cart">
-                                <i class="fas fa-shopping-cart"></i> Agregar
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Agregar</span>
                             </button>
                         </form>
-                        <a href="{% url 'products:product_detail' product.id %}" class="view-details">
+                        <a href="{% url 'products:product_detail' product.slug %}" class="view-details">
                             <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -340,6 +422,16 @@
             <p>No hay productos disponibles en este momento.</p>
         </div>
         {% endif %}
+    </div>
+
+    <!-- Carrito Flotante -->
+    <div class="floating-cart">
+        <button class="cart-button" id="floatingCartBtn" aria-label="Ver carrito">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="floatingCartCount" style="display: {% if cart.item_count > 0 %}flex{% else %}none{% endif %};">
+                {{ cart.item_count|default:0 }}
+            </span>
+        </button>
     </div>
 </section>
 {% endblock %}
@@ -399,11 +491,66 @@
     `;
     document.head.appendChild(style);
 
-    // Mostrar notificación si se agregó al carrito
-    {% if messages %}
-        {% for message in messages %}
-            showNotification('{{ message }}');
-        {% endfor %}
-    {% endif %}
+    // Las notificaciones se muestran automáticamente desde base.html
+    // No es necesario duplicarlas aquí
+
+    // ==========================================
+    // CARRITO FLOTANTE - Abrir sidebar y sincronización
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+        const floatingCartBtn = document.getElementById('floatingCartBtn');
+        const cartToggle = document.getElementById('cartToggle');
+        const floatingCount = document.getElementById('floatingCartCount');
+
+        // Función para sincronizar el contador flotante con el del navbar
+        function syncFloatingCart() {
+            const navbarCount = document.getElementById('cartCount');
+            if (navbarCount && floatingCount) {
+                const count = parseInt(navbarCount.textContent) || 0;
+                floatingCount.textContent = count;
+                floatingCount.style.display = count > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Sincronizar al cargar la página
+        syncFloatingCart();
+
+        // Abrir sidebar al hacer click en el carrito flotante
+        if (floatingCartBtn && cartToggle) {
+            floatingCartBtn.addEventListener('click', function() {
+                cartToggle.click();
+            });
+        }
+
+        // Sincronizar cuando se actualice el carrito
+        if (window.GatewayCart) {
+            const originalUpdateCount = window.GatewayCart.updateCartCount;
+            window.GatewayCart.updateCartCount = function(count) {
+                originalUpdateCount(count);
+                if (floatingCount) {
+                    floatingCount.textContent = count;
+                    floatingCount.style.display = count > 0 ? 'flex' : 'none';
+                }
+            };
+
+            // También sincronizar después de cargar el carrito
+            const originalLoadCart = window.GatewayCart.loadCart;
+            window.GatewayCart.loadCart = async function() {
+                await originalLoadCart();
+                syncFloatingCart();
+            };
+        }
+
+        // Observar cambios en el contador del navbar para sincronización automática
+        if (window.MutationObserver) {
+            const navbarCount = document.getElementById('cartCount');
+            if (navbarCount) {
+                const observer = new MutationObserver(function() {
+                    syncFloatingCart();
+                });
+                observer.observe(navbarCount, { childList: true, characterData: true, subtree: true });
+            }
+        }
+    });
 </script>
 {% endblock %}

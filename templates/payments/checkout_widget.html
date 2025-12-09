@@ -1,0 +1,614 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<style>
+    .checkout-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .checkout-main {
+        background: var(--card-background);
+        border-radius: 15px;
+        padding: 30px;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        box-shadow: var(--shadow-card);
+    }
+
+    .checkout-sidebar {
+        background: var(--card-background);
+        border-radius: 15px;
+        padding: 25px;
+        border: 1px solid rgba(245, 134, 53, 0.15);
+        box-shadow: var(--shadow-card);
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        color: var(--text-gray);
+        margin-bottom: 30px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .form-section h2 {
+        font-size: 1.3rem;
+        color: var(--text-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(128, 128, 128, 0.2);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid rgba(128, 128, 128, 0.3);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        font-family: inherit;
+        background: var(--background);
+        color: var(--text-color);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #F58635;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .wompi-button {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #F58635 0%, #ff9d5c 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .wompi-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 134, 53, 0.3);
+    }
+
+    .wompi-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .order-summary h2 {
+        font-size: 1.4rem;
+        color: var(--text-color);
+        margin-bottom: 20px;
+    }
+
+    .summary-items {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .summary-item {
+        display: flex;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+    }
+
+    .item-image {
+        width: 60px;
+        height: 60px;
+        background: var(--background);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .item-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-name {
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 5px;
+    }
+
+    .item-details {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+    }
+
+    .item-price {
+        font-weight: 600;
+        color: var(--text-color);
+        white-space: nowrap;
+    }
+
+    .summary-totals {
+        padding-top: 20px;
+        border-top: 2px solid rgba(128, 128, 128, 0.2);
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 1rem;
+        color: var(--text-color);
+    }
+
+    .total-row.final {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #F58635;
+        padding-top: 15px;
+        border-top: 2px solid rgba(128, 128, 128, 0.2);
+        margin-top: 15px;
+    }
+
+    .security-badge {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(128, 128, 128, 0.1);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .security-badge i {
+        color: #4CAF50;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .security-badge p {
+        margin: 5px 0 0;
+        font-size: 0.9rem;
+        color: var(--text-gray);
+    }
+
+    .payment-methods {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(128, 128, 128, 0.1);
+        border-radius: 8px;
+    }
+
+    .payment-methods h3 {
+        font-size: 1rem;
+        color: var(--text-gray);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .payment-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .payment-logos img {
+        height: 50px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+
+    .payment-logos img:hover {
+        opacity: 1;
+    }
+
+    @media (max-width: 968px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .checkout-sidebar {
+            position: static;
+        }
+    }
+
+    /* Loading spinner */
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #F58635;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block title %}Checkout - Gateway IT{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1>Finalizar Compra</h1>
+    <p class="subtitle">Completa tus datos y procede al pago seguro con Wompi</p>
+
+    <div class="checkout-grid">
+        <!-- Main Checkout Form -->
+        <div class="checkout-main">
+            <form id="customerForm">
+                <div class="form-section">
+                    <h2><i class="fas fa-user"></i> Información del Cliente</h2>
+
+                    <div class="form-group">
+                        <label for="customer_name">Nombre Completo *</label>
+                        <input type="text" id="customer_name" name="customer_name" required
+                               value="{% if request.user.is_authenticated %}{{ request.user.get_full_name }}{% endif %}"
+                               placeholder="Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_email">Email *</label>
+                        <input type="email" id="customer_email" name="customer_email" required
+                               value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}"
+                               placeholder="juan@ejemplo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_phone">Teléfono *</label>
+                        <input type="tel" id="customer_phone" name="customer_phone" required
+                               placeholder="3001234567" pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2><i class="fas fa-map-marker-alt"></i> Dirección de Envío</h2>
+
+                    {% if saved_addresses %}
+                    <div class="form-group">
+                        <label for="saved_address_selector">Seleccionar dirección guardada (opcional)</label>
+                        <select id="saved_address_selector" name="saved_address_selector" class="saved-address-selector">
+                            <option value="">-- Ingresar nueva dirección --</option>
+                            {% for address in saved_addresses %}
+                            <option value="{{ address.id }}"
+                                    data-recipient="{{ address.recipient_name }}"
+                                    data-phone="{{ address.recipient_phone }}"
+                                    data-address="{{ address.address_line1 }}"
+                                    data-city="{{ address.city }}"
+                                    data-state="{{ address.state }}"
+                                    {% if address.is_default %}selected{% endif %}>
+                                {% if address.is_default %}⭐ {% endif %}{{ address.recipient_name }} - {{ address.address_line1 }}, {{ address.city }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="shipping_address">Dirección *</label>
+                        <input type="text" id="shipping_address" name="shipping_address" required
+                               placeholder="Calle 123 #45-67">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="shipping_city">Ciudad *</label>
+                            <input type="text" id="shipping_city" name="shipping_city" required
+                                   placeholder="Bogotá">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shipping_department">Departamento *</label>
+                            <select id="shipping_department" name="shipping_department" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Amazonas">Amazonas</option>
+                                <option value="Antioquia">Antioquia</option>
+                                <option value="Arauca">Arauca</option>
+                                <option value="Atlántico">Atlántico</option>
+                                <option value="Bolívar">Bolívar</option>
+                                <option value="Boyacá">Boyacá</option>
+                                <option value="Caldas">Caldas</option>
+                                <option value="Caquetá">Caquetá</option>
+                                <option value="Casanare">Casanare</option>
+                                <option value="Cauca">Cauca</option>
+                                <option value="Cesar">Cesar</option>
+                                <option value="Chocó">Chocó</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Cundinamarca">Cundinamarca</option>
+                                <option value="Guainía">Guainía</option>
+                                <option value="Guaviare">Guaviare</option>
+                                <option value="Huila">Huila</option>
+                                <option value="La Guajira">La Guajira</option>
+                                <option value="Magdalena">Magdalena</option>
+                                <option value="Meta">Meta</option>
+                                <option value="Nariño">Nariño</option>
+                                <option value="Norte de Santander">Norte de Santander</option>
+                                <option value="Putumayo">Putumayo</option>
+                                <option value="Quindío">Quindío</option>
+                                <option value="Risaralda">Risaralda</option>
+                                <option value="San Andrés y Providencia">San Andrés y Providencia</option>
+                                <option value="Santander">Santander</option>
+                                <option value="Sucre">Sucre</option>
+                                <option value="Tolima">Tolima</option>
+                                <option value="Valle del Cauca">Valle del Cauca</option>
+                                <option value="Vaupés">Vaupés</option>
+                                <option value="Vichada">Vichada</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipping_notes">Notas de Entrega (opcional)</label>
+                        <textarea id="shipping_notes" name="shipping_notes" rows="3"
+                                  placeholder="Instrucciones especiales para la entrega, apartamento, torre, etc."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2><i class="fas fa-credit-card"></i> Pago</h2>
+
+                    <button type="button" id="payButton" class="wompi-button">
+                        <i class="fas fa-lock"></i>
+                        Pagar ${{ total|floatformat:0|intcomma }} COP con Wompi
+                    </button>
+
+                    <div class="payment-methods">
+                        <h3>Métodos de pago disponibles:</h3>
+                        <div class="payment-logos">
+                            <img src="{% static 'img/Wompi/tarjeta.png' %}" alt="Tarjetas" title="Tarjetas de crédito/débito">
+                            <img src="{% static 'img/Wompi/pse_logo.svg' %}" alt="PSE" title="PSE - Débito bancario">
+                            <img src="{% static 'img/Wompi/nequi_logo.svg' %}" alt="Nequi" title="Nequi">
+                            <img src="{% static 'img/Wompi/bancolombia_logo.svg' %}" alt="Bancolombia" title="Bancolombia">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <div class="checkout-sidebar">
+            <div class="order-summary">
+                <h2>Resumen del Pedido</h2>
+
+                <div class="summary-items">
+                    {% for item in cart.items.all %}
+                    <div class="summary-item">
+                        <div class="item-image">
+                            {% if item.product.primary_image %}
+                                <img src="{{ item.product.primary_image }}" alt="{{ item.product.name }}">
+                            {% else %}
+                                <i class="fas fa-box" style="font-size: 1.5rem; color: #ccc;"></i>
+                            {% endif %}
+                        </div>
+                        <div class="item-info">
+                            <div class="item-name">{{ item.product.name }}</div>
+                            <div class="item-details">
+                                Cantidad: {{ item.quantity }} × ${{ item.price|floatformat:0|intcomma }}
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            ${{ item.subtotal|floatformat:0|intcomma }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="summary-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span>${{ cart.total|floatformat:0|intcomma }}</span>
+                    </div>
+                    <div class="total-row">
+                        <span>IVA (19%):</span>
+                        <span>${{ tax|floatformat:0|intcomma }}</span>
+                    </div>
+                    <div class="total-row final">
+                        <span>Total:</span>
+                        <span>${{ total|floatformat:0|intcomma }}</span>
+                    </div>
+                </div>
+
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <p><strong>Pago 100% seguro</strong><br>Encriptado por Wompi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form oculto para enviar transacción al backend -->
+<form id="transactionForm" method="POST" action="{% url 'payments:create_order_from_widget' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="customer_name" id="hidden_customer_name">
+    <input type="hidden" name="customer_email" id="hidden_customer_email">
+    <input type="hidden" name="customer_phone" id="hidden_customer_phone">
+    <input type="hidden" name="shipping_address" id="hidden_shipping_address">
+    <input type="hidden" name="shipping_city" id="hidden_shipping_city">
+    <input type="hidden" name="shipping_department" id="hidden_shipping_department">
+    <input type="hidden" name="shipping_notes" id="hidden_shipping_notes">
+    <input type="hidden" name="transaction_id" id="hidden_transaction_id">
+    <input type="hidden" name="reference" id="hidden_reference">
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Widget de Wompi -->
+<script src="https://checkout.wompi.co/widget.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const payButton = document.getElementById('payButton');
+    const customerForm = document.getElementById('customerForm');
+
+    // Selector de direcciones guardadas
+    const addressSelector = document.getElementById('saved_address_selector');
+    if (addressSelector) {
+        // Auto-completar con dirección predeterminada al cargar
+        const defaultOption = addressSelector.querySelector('option[selected]');
+        if (defaultOption && defaultOption.value) {
+            fillAddressFields(defaultOption);
+        }
+
+        // Escuchar cambios en el selector
+        addressSelector.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                fillAddressFields(selectedOption);
+            }
+        });
+    }
+
+    function fillAddressFields(option) {
+        document.getElementById('shipping_address').value = option.dataset.address || '';
+        document.getElementById('shipping_city').value = option.dataset.city || '';
+        document.getElementById('shipping_department').value = option.dataset.state || '';
+    }
+
+    payButton.addEventListener('click', function() {
+        // Validar formulario
+        if (!customerForm.checkValidity()) {
+            customerForm.reportValidity();
+            return;
+        }
+
+        // Obtener datos del cliente
+        const customerName = document.getElementById('customer_name').value;
+        const customerEmail = document.getElementById('customer_email').value;
+        const customerPhone = document.getElementById('customer_phone').value;
+
+        // Generar referencia única
+        const reference = 'GW-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+
+        // Deshabilitar botón
+        payButton.disabled = true;
+        payButton.innerHTML = '<div class="spinner"></div> Abriendo pasarela de pago...';
+
+        // Verificar que el Widget esté disponible
+        if (typeof WidgetCheckout === 'undefined') {
+            alert('Error: El Widget de Wompi no se cargó correctamente. Por favor recarga la página.');
+            payButton.disabled = false;
+            payButton.innerHTML = '<i class="fas fa-lock"></i> Pagar ${{ total|floatformat:0|intcomma }} COP con Wompi';
+            return;
+        }
+
+        try {
+            // Configurar Widget de Wompi
+            const checkout = new WidgetCheckout({
+                currency: 'COP',
+                amountInCents: {{ total_in_cents }},
+                reference: reference,
+                publicKey: '{{ wompi_public_key }}',
+                redirectUrl: '{{ redirect_url }}',
+                customerData: {
+                    email: customerEmail,
+                    fullName: customerName,
+                    phoneNumber: customerPhone,
+                    phoneNumberPrefix: '+57'
+                }
+            });
+
+            console.log('Widget configurado correctamente:', {
+                reference: reference,
+                amountInCents: {{ total_in_cents }},
+                publicKey: '{{ wompi_public_key }}'
+            });
+
+            // Abrir Widget
+            checkout.open(function(result) {
+                const transaction = result.transaction;
+
+                console.log('Resultado del pago:', transaction);
+
+                // Guardar datos del cliente en form oculto
+                document.getElementById('hidden_customer_name').value = customerName;
+                document.getElementById('hidden_customer_email').value = customerEmail;
+                document.getElementById('hidden_customer_phone').value = customerPhone;
+
+                // Guardar datos de dirección de envío
+                document.getElementById('hidden_shipping_address').value = document.getElementById('shipping_address').value;
+                document.getElementById('hidden_shipping_city').value = document.getElementById('shipping_city').value;
+                document.getElementById('hidden_shipping_department').value = document.getElementById('shipping_department').value;
+                document.getElementById('hidden_shipping_notes').value = document.getElementById('shipping_notes').value;
+
+                // Guardar datos de la transacción
+                document.getElementById('hidden_transaction_id').value = transaction.id;
+                document.getElementById('hidden_reference').value = reference;
+
+                // Enviar al backend
+                document.getElementById('transactionForm').submit();
+            });
+        } catch (error) {
+            console.error('Error al abrir Widget de Wompi:', error);
+            alert('Error al abrir el Widget de Wompi: ' + error.message);
+            payButton.disabled = false;
+            payButton.innerHTML = '<i class="fas fa-lock"></i> Pagar ${{ total|floatformat:0|intcomma }} COP con Wompi';
+        }
+
+        // Reactivar botón si el usuario cierra el widget sin pagar
+        setTimeout(function() {
+            if (payButton.disabled) {
+                payButton.disabled = false;
+                payButton.innerHTML = '<i class="fas fa-lock"></i> Pagar ${{ total|floatformat:0|intcomma }} COP con Wompi';
+            }
+        }, 60000); // 1 minuto
+    });
+});
+</script>
+{% endblock %}

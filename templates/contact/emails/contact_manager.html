@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo mensaje de contacto</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #F58635 0%, #ff9d5c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .email-header p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .email-body {
+            padding: 30px;
+        }
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #F58635;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+        .alert-box p {
+            margin: 0;
+            color: #856404;
+            font-weight: 600;
+        }
+        .info-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 700;
+            color: #333;
+            min-width: 120px;
+            display: inline-block;
+        }
+        .info-value {
+            color: #666;
+            flex: 1;
+        }
+        .message-box {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .message-box h3 {
+            margin: 0 0 15px;
+            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .message-box p {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+        .email-footer p {
+            margin: 5px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #F58635 0%, #ff9d5c 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(245, 134, 53, 0.3);
+        }
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>📧 Nuevo Mensaje de Contacto</h1>
+            <p>Gateway IT - Portal de Administración</p>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <div class="alert-box">
+                <p>⚡ Tienes un nuevo mensaje de un cliente potencial</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">👤 Nombre:</span>
+                    <span class="info-value">{{ contact.name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📧 Email:</span>
+                    <span class="info-value"><a href="mailto:{{ contact.email }}" style="color: #F58635; text-decoration: none;">{{ contact.email }}</a></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📱 Teléfono:</span>
+                    <span class="info-value"><a href="tel:{{ contact.phone }}" style="color: #F58635; text-decoration: none;">{{ contact.phone }}</a></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🕐 Fecha:</span>
+                    <span class="info-value">{{ contact.created_at|date:"d/m/Y H:i" }}</span>
+                </div>
+            </div>
+
+            <div class="message-box">
+                <h3>💬 Mensaje del Cliente:</h3>
+                <p>{{ contact.message }}</p>
+            </div>
+
+            <center>
+                <a href="mailto:{{ contact.email }}" class="cta-button">
+                    ↩️ Responder al Cliente
+                </a>
+            </center>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p><strong>Gateway IT</strong></p>
+            <p>Soluciones tecnológicas eficientes para el crecimiento de su empresa</p>
+            <p style="margin-top: 15px; color: #999;">
+                Este es un mensaje automático del sistema de contacto de Gateway IT.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
