@@ -9,6 +9,7 @@ __pycache__/
 .env.example
 .env.production.example
 .idea/
+.claude/
 .vscode/
 .DS_Store
 integraciones_docs.txt

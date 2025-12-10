@@ -1,8 +1,9 @@
-
 #? config/settings.py
 import os
 from pathlib import Path
 from decouple import config
+import pymysql
+pymysql.install_as_MySQLdb()
 
 #* Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
