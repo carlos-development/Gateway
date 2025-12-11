@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ product.name }} - Gateway IT{% endblock %}
 
@@ -565,9 +566,9 @@
 
                 <!-- Precio -->
                 <div class="detail-price-section">
-                    <span class="detail-price">${{ product.final_price|floatformat:0 }}</span>
+                    <span class="detail-price">${{ product.final_price|floatformat:0|intcomma }}</span>
                     {% if product.has_discount %}
-                        <span class="original-price">${{ product.price|floatformat:0 }}</span>
+                        <span class="original-price">${{ product.price|floatformat:0|intcomma }}</span>
                         <span class="discount-badge">-{{ product.discount_percentage }}%</span>
                     {% endif %}
                 </div>
