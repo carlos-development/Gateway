@@ -921,21 +921,40 @@ def wompi_webhook(request):
         # 1. Leer el body del request
         payload = json.loads(request.body.decode('utf-8'))
 
-        # 2. Validar firma de integridad (si está configurada)
-        signature_header = request.headers.get('X-Webhook-Signature', '')
-        if settings.WOMPI_EVENTS_SECRET:
+        # 2. Validar firma de integridad según documentación de Wompi
+        # La firma viene en payload.signature.checksum
+        # Se calcula: SHA256(concatenar valores de las properties + timestamp + events_secret)
+        if settings.WOMPI_EVENTS_SECRET and 'signature' in payload:
             import hashlib
-            import hmac
 
-            expected_signature = hmac.new(
-                settings.WOMPI_EVENTS_SECRET.encode('utf-8'),
-                request.body,
-                hashlib.sha256
-            ).hexdigest()
+            signature_data = payload.get('signature', {})
+            checksum_received = signature_data.get('checksum', '')
+            properties = signature_data.get('properties', [])
+            timestamp = payload.get('timestamp', '')
 
-            if not hmac.compare_digest(signature_header, expected_signature):
-                logger.warning(f"Webhook signature mismatch: {signature_header} != {expected_signature}")
+            # Construir string para validar
+            # Concatenar valores de las propiedades especificadas
+            values_to_concat = []
+            transaction_data = payload.get('data', {}).get('transaction', {})
+
+            for prop in properties:
+                # Las propiedades vienen como "transaction.id", "transaction.status", etc.
+                prop_key = prop.replace('transaction.', '')
+                value = transaction_data.get(prop_key, '')
+                values_to_concat.append(str(value))
+
+            # Agregar timestamp y secret
+            concat_string = ''.join(values_to_concat) + str(timestamp) + settings.WOMPI_EVENTS_SECRET
+
+            # Calcular checksum esperado
+            expected_checksum = hashlib.sha256(concat_string.encode('utf-8')).hexdigest()
+
+            # Validar
+            if checksum_received != expected_checksum:
+                logger.warning(f"Webhook signature mismatch: received={checksum_received}, expected={expected_checksum}, concat_string={concat_string}")
                 return JsonResponse({'error': 'Invalid signature'}, status=401)
+
+            logger.info(f"Webhook signature validated successfully")
 
         # 3. Extraer datos del evento
         event_type = payload.get('event')
