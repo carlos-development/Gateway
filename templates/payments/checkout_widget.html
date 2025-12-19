@@ -491,6 +491,8 @@
 {% block extra_js %}
 <!-- Widget de Wompi -->
 <script src="https://checkout.wompi.co/widget.js"></script>
+<!-- SHA-256 library for integrity signature -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -536,6 +538,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Generar referencia única
         const reference = 'GW-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9).toUpperCase();
 
+        // Calcular firma de integridad
+        // Formato: SHA256(reference + amountInCents + currency + integrityKey)
+        const amountInCents = {{ total_in_cents }};
+        const currency = 'COP';
+        const integrityKey = '{{ wompi_integrity_key }}';
+        const concatenatedString = reference + amountInCents + currency + integrityKey;
+        const integritySignature = CryptoJS.SHA256(concatenatedString).toString();
+
+        console.log('Calculando firma de integridad:', {
+            reference: reference,
+            amountInCents: amountInCents,
+            currency: currency,
+            concatenatedString: concatenatedString,
+            signature: integritySignature
+        });
+
         // Deshabilitar botón
         payButton.disabled = true;
         payButton.innerHTML = '<div class="spinner"></div> Abriendo pasarela de pago...';
@@ -552,10 +570,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Configurar Widget de Wompi
             const checkout = new WidgetCheckout({
                 currency: 'COP',
-                amountInCents: {{ total_in_cents }},
+                amountInCents: amountInCents,
                 reference: reference,
                 publicKey: '{{ wompi_public_key }}',
                 redirectUrl: '{{ redirect_url }}',
+                signature: {
+                    integrity: integritySignature
+                },
                 customerData: {
                     email: customerEmail,
                     fullName: customerName,

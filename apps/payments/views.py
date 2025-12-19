@@ -110,6 +110,7 @@ def checkout_widget_view(request):
         'total': total,
         'total_in_cents': total_in_cents,
         'wompi_public_key': settings.WOMPI_PUBLIC_KEY,
+        'wompi_integrity_key': settings.WOMPI_INTEGRITY_KEY,
         'redirect_url': redirect_url,
         'environment': settings.WOMPI_ENVIRONMENT,
         'saved_addresses': saved_addresses,
