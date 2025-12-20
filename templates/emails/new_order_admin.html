@@ -93,20 +93,20 @@
 </div>
 {% endif %}
 
-{% if order.payment_set.first %}
+{% if order.payments.first %}
 <h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Información de pago</h2>
 <div class="info-section">
     <div class="info-row">
         <span class="info-label">Método de pago</span>
-        <span class="info-value">{{ order.payment_set.first.payment_method }}</span>
+        <span class="info-value">{{ order.payments.first.payment_method }}</span>
     </div>
     <div class="info-row">
         <span class="info-label">ID de transacción</span>
-        <span class="info-value">{{ order.payment_set.first.wompi_transaction_id }}</span>
+        <span class="info-value">{{ order.payments.first.wompi_transaction_id }}</span>
     </div>
     <div class="info-row">
         <span class="info-label">Referencia</span>
-        <span class="info-value">{{ order.payment_set.first.wompi_reference }}</span>
+        <span class="info-value">{{ order.payments.first.wompi_reference }}</span>
     </div>
 </div>
 {% endif %}

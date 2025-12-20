@@ -1101,7 +1101,7 @@ def my_orders_view(request):
 def order_detail_view(request, order_id):
     """Vista de detalle de un pedido específico"""
     order = get_object_or_404(Order, id=order_id, user=request.user)
-    payment = order.payment_set.first()
+    payment = order.payments.first()  # Cambio: payment_set -> payments
 
     context = {
         'order': order,
