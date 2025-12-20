@@ -106,6 +106,33 @@ class Order(models.Model):
         """Suma total de los items del pedido"""
         return sum(item.subtotal for item in self.items.all())
 
+    def get_shipping_address(self):
+        """Obtener dirección de envío como string"""
+        if self.shipping_address:
+            return self.shipping_address.get('address', '')
+        return ''
+
+    @property
+    def shipping_city(self):
+        """Obtener ciudad de envío del JSON"""
+        if self.shipping_address:
+            return self.shipping_address.get('city', '')
+        return ''
+
+    @property
+    def shipping_state(self):
+        """Obtener departamento de envío del JSON"""
+        if self.shipping_address:
+            return self.shipping_address.get('state', '')
+        return ''
+
+    @property
+    def shipping_notes(self):
+        """Obtener notas de envío del JSON"""
+        if self.shipping_address:
+            return self.shipping_address.get('notes', '')
+        return ''
+
 
 class OrderItem(models.Model):
     """Items del pedido"""
@@ -139,6 +166,10 @@ class OrderItem(models.Model):
     @property
     def subtotal(self):
         return self.quantity * self.unit_price
+
+    def get_subtotal(self):
+        """Método para usar en templates"""
+        return self.subtotal
 
 
 class Payment(models.Model):

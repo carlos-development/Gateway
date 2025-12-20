@@ -120,6 +120,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Email del admin para notificaciones de pedidos
+ADMIN_ORDER_EMAIL = config('ADMIN_ORDER_EMAIL', default='info@gatewayit.com.co')
+
 #* Celery Configuration (para sincronización API)
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://localhost:6379/0')

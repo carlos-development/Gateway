@@ -24,6 +24,10 @@ urlpatterns = [
     # Webhooks
     path('webhook/wompi/', views.wompi_webhook, name='wompi_webhook'),
 
+    # Customer order views
+    path('mi-cuenta/pedidos/', views.my_orders_view, name='my_orders'),
+    path('mi-cuenta/pedidos/<uuid:order_id>/', views.order_detail_view, name='order_detail'),
+
     # API endpoints para AJAX
     path('api/pse-banks/', views.get_pse_banks, name='get_pse_banks'),
     path('api/tokenize-card/', views.tokenize_card, name='tokenize_card'),

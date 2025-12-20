@@ -10,6 +10,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods, require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -17,6 +18,7 @@ from django.utils import timezone
 from apps.products.models import Cart, CartItem
 from .models import Order, OrderItem, Payment, WompiWebhookEvent
 from .services import WompiClient
+from .email_utils import send_order_confirmation_email, send_payment_approved_email, send_new_order_admin_email
 
 logger = logging.getLogger(__name__)
 
@@ -746,6 +748,12 @@ def create_order_from_widget(request):
         transaction_id = request.POST.get('transaction_id')
         reference = request.POST.get('reference')
 
+        # Datos de envío
+        shipping_address_line = request.POST.get('shipping_address', '')
+        shipping_city = request.POST.get('shipping_city', '')
+        shipping_department = request.POST.get('shipping_department', '')
+        shipping_notes = request.POST.get('shipping_notes', '')
+
         # Validar datos requeridos
         if not all([customer_name, customer_email, customer_phone, transaction_id, reference]):
             messages.error(request, 'Datos incompletos del pago')
@@ -763,6 +771,14 @@ def create_order_from_widget(request):
         tax = cart.total * Decimal('0.19')
         total = cart.total * Decimal('1.19')
 
+        # Preparar datos de dirección de envío
+        shipping_address_data = {
+            'address': shipping_address_line,
+            'city': shipping_city,
+            'state': shipping_department,
+            'notes': shipping_notes
+        }
+
         # Crear la orden
         order = Order.objects.create(
             user=request.user if request.user.is_authenticated else None,
@@ -773,6 +789,7 @@ def create_order_from_widget(request):
             total_amount=total,
             tax_amount=tax,
             shipping_amount=Decimal('0.00'),
+            shipping_address=shipping_address_data,
             status='PROCESSING'
         )
 
@@ -822,12 +839,21 @@ def create_order_from_widget(request):
             cart.items.all().delete()
             cart.delete()
 
+            # Enviar emails
+            send_payment_approved_email(order, payment)
+            send_new_order_admin_email(order)
+
             messages.success(request, '¡Pago exitoso! Tu pedido ha sido confirmado.')
             return redirect('payments:payment_success', order_id=order.id)
 
         elif status == 'PENDING':
             order.status = 'PROCESSING'
             order.save()
+
+            # Enviar email de confirmación de orden
+            send_order_confirmation_email(order)
+            send_new_order_admin_email(order)
+
             messages.info(request, 'Tu pago está siendo procesado. Te notificaremos cuando se confirme.')
             return redirect('payments:payment_pending', order_id=order.id)
 
@@ -1005,11 +1031,16 @@ def wompi_webhook(request):
             # Actualizar estado de la orden
             order = payment.order
 
-            if status == 'APPROVED':
+            if status == 'APPROVED' and old_status != 'APPROVED':
+                # Solo actualizar si el estado cambió a APPROVED
                 order.status = 'PAID'
                 order.paid_at = timezone.now()
                 order.save()
                 logger.info(f"Orden {order.order_number} marcada como PAID")
+
+                # Enviar email de pago aprobado
+                send_payment_approved_email(order, payment)
+                logger.info(f"Email de pago aprobado enviado para orden {order.order_number}")
 
             elif status == 'DECLINED':
                 order.status = 'FAILED'
@@ -1048,3 +1079,33 @@ def wompi_webhook(request):
     except Exception as e:
         logger.error(f"Error procesando webhook: {e}", exc_info=True)
         return JsonResponse({'error': str(e)}, status=500)
+
+
+# ==========================================
+# MIS COMPRAS - CUSTOMER ORDER VIEWS
+# ==========================================
+
+@login_required
+def my_orders_view(request):
+    """Vista de 'Mis Compras' - Listado de pedidos del usuario"""
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
+    context = {
+        'orders': orders,
+    }
+
+    return render(request, 'payments/my_orders.html', context)
+
+
+@login_required
+def order_detail_view(request, order_id):
+    """Vista de detalle de un pedido específico"""
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    payment = order.payment_set.first()
+
+    context = {
+        'order': order,
+        'payment': payment,
+    }
+
+    return render(request, 'payments/order_detail.html', context)

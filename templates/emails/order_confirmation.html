@@ -1,0 +1,104 @@
+{% extends "emails/base_email.html" %}
+{% load humanize %}
+
+{% block title %}Confirmación de pedido #{{ order.order_number }}{% endblock %}
+
+{% block content %}
+<p class="greeting">Hola {{ order.customer_name }},</p>
+
+<h1 class="main-title">Gracias por tu pedido</h1>
+<p class="subtitle">Hemos recibido tu pedido y lo estamos preparando. Te notificaremos cuando esté en camino.</p>
+
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Número de pedido</span>
+        <span class="info-value">{{ order.order_number }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Fecha</span>
+        <span class="info-value">{{ order.created_at|date:"d/m/Y H:i" }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Estado</span>
+        <span class="info-value">
+            {% if order.status == 'PAID' %}
+                <span class="status-badge status-paid">Pagado</span>
+            {% elif order.status == 'PROCESSING' %}
+                <span class="status-badge status-processing">Procesando</span>
+            {% else %}
+                <span class="status-badge status-pending">Pendiente</span>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Artículos del pedido</h2>
+
+<table class="items-table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th class="text-right">Cantidad</th>
+            <th class="text-right">Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td>
+                <div class="item-name">{{ item.product_name }}</div>
+                {% if item.product_sku %}
+                <div class="item-qty">SKU: {{ item.product_sku }}</div>
+                {% endif %}
+            </td>
+            <td class="text-right">{{ item.quantity }}</td>
+            <td class="text-right">${{ item.unit_price|floatformat:0|intcomma }} COP</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Subtotal</span>
+        <span class="info-value">${{ order.subtotal|floatformat:0|intcomma }} COP</span>
+    </div>
+    {% if order.tax_amount %}
+    <div class="info-row">
+        <span class="info-label">IVA (19%)</span>
+        <span class="info-value">${{ order.tax_amount|floatformat:0|intcomma }} COP</span>
+    </div>
+    {% endif %}
+    {% if order.shipping_amount %}
+    <div class="info-row">
+        <span class="info-label">Envío</span>
+        <span class="info-value">${{ order.shipping_amount|floatformat:0|intcomma }} COP</span>
+    </div>
+    {% endif %}
+    <div class="info-row total-row">
+        <span class="info-label">Total</span>
+        <span class="info-value">${{ order.total_amount|floatformat:0|intcomma }} COP</span>
+    </div>
+</div>
+
+{% if order.get_shipping_address %}
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Dirección de envío</h2>
+<div class="info-section">
+    <p style="font-size: 14px; color: #1a1a1a; line-height: 1.6;">
+        {{ order.get_shipping_address }}<br>
+        {{ order.shipping_city }}, {{ order.shipping_state }}<br>
+        {% if order.shipping_notes %}
+        <span style="color: #666;">Notas: {{ order.shipping_notes }}</span>
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+
+<a href="https://gatewayit.com.co/mi-cuenta/pedidos/{{ order.id }}/" class="button">Ver detalles del pedido</a>
+
+<div class="divider"></div>
+
+<p style="font-size: 13px; color: #666; line-height: 1.6;">
+    Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos respondiendo a este correo o visitando nuestro <a href="https://gatewayit.com.co/contacto" style="color: #F58635;">centro de soporte</a>.
+</p>
+{% endblock %}

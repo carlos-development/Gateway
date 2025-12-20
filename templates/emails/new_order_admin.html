@@ -1,0 +1,115 @@
+{% extends "emails/base_email.html" %}
+{% load humanize %}
+
+{% block title %}Nuevo pedido #{{ order.order_number }}{% endblock %}
+
+{% block content %}
+<h1 class="main-title">Nuevo pedido recibido</h1>
+<p class="subtitle">Se ha recibido un nuevo pedido en Gateway IT</p>
+
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Número de pedido</span>
+        <span class="info-value">{{ order.order_number }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Fecha</span>
+        <span class="info-value">{{ order.created_at|date:"d/m/Y H:i" }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Estado</span>
+        <span class="info-value">
+            {% if order.status == 'PAID' %}
+                <span class="status-badge status-paid">Pagado</span>
+            {% elif order.status == 'PROCESSING' %}
+                <span class="status-badge status-processing">Procesando</span>
+            {% else %}
+                <span class="status-badge status-pending">Pendiente</span>
+            {% endif %}
+        </span>
+    </div>
+    <div class="info-row total-row">
+        <span class="info-label">Total del pedido</span>
+        <span class="info-value">${{ order.total_amount|floatformat:0|intcomma }} COP</span>
+    </div>
+</div>
+
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Información del cliente</h2>
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Nombre</span>
+        <span class="info-value">{{ order.customer_name }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{ order.customer_email }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Teléfono</span>
+        <span class="info-value">{{ order.customer_phone }}</span>
+    </div>
+</div>
+
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Artículos del pedido</h2>
+
+<table class="items-table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th class="text-right">Cantidad</th>
+            <th class="text-right">Precio unitario</th>
+            <th class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td>
+                <div class="item-name">{{ item.product_name }}</div>
+                {% if item.product_sku %}
+                <div class="item-qty">SKU: {{ item.product_sku }}</div>
+                {% endif %}
+            </td>
+            <td class="text-right">{{ item.quantity }}</td>
+            <td class="text-right">${{ item.unit_price|floatformat:0|intcomma }}</td>
+            <td class="text-right">${{ item.get_subtotal|floatformat:0|intcomma }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if order.get_shipping_address %}
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Dirección de envío</h2>
+<div class="info-section">
+    <p style="font-size: 14px; color: #1a1a1a; line-height: 1.6;">
+        {{ order.get_shipping_address }}<br>
+        {{ order.shipping_city }}, {{ order.shipping_state }}<br>
+        {% if order.shipping_notes %}
+        <br>
+        <strong>Notas de entrega:</strong><br>
+        {{ order.shipping_notes }}
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+
+{% if order.payment_set.first %}
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Información de pago</h2>
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Método de pago</span>
+        <span class="info-value">{{ order.payment_set.first.payment_method }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">ID de transacción</span>
+        <span class="info-value">{{ order.payment_set.first.wompi_transaction_id }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Referencia</span>
+        <span class="info-value">{{ order.payment_set.first.wompi_reference }}</span>
+    </div>
+</div>
+{% endif %}
+
+<a href="https://gatewayit.com.co/admin/payments/order/{{ order.id }}/change/" class="button">Ver en panel de administración</a>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "emails/base_email.html" %}
+{% load humanize %}
+
+{% block title %}Pago confirmado - Pedido #{{ order.order_number }}{% endblock %}
+
+{% block content %}
+<p class="greeting">Hola {{ order.customer_name }},</p>
+
+<h1 class="main-title">Tu pago ha sido confirmado</h1>
+<p class="subtitle">Hemos recibido tu pago exitosamente. Tu pedido está siendo preparado para envío.</p>
+
+<div class="info-section">
+    <div class="info-row">
+        <span class="info-label">Número de pedido</span>
+        <span class="info-value">{{ order.order_number }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Estado</span>
+        <span class="info-value">
+            <span class="status-badge status-paid">Pagado</span>
+        </span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Monto pagado</span>
+        <span class="info-value">${{ order.total_amount|floatformat:0|intcomma}} COP</span>
+    </div>
+    {% if payment %}
+    <div class="info-row">
+        <span class="info-label">Método de pago</span>
+        <span class="info-value">{{ payment.payment_method }}</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Referencia de pago</span>
+        <span class="info-value">{{ payment.wompi_reference }}</span>
+    </div>
+    {% endif %}
+</div>
+
+<h2 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 32px 0 16px 0;">Próximos pasos</h2>
+<p style="font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px;">
+    1. Nuestro equipo preparará tu pedido<br>
+    2. Te notificaremos cuando sea enviado<br>
+    3. Recibirás un número de seguimiento del envío
+</p>
+
+<a href="https://gatewayit.com.co/mi-cuenta/pedidos/{{ order.id }}/" class="button">Ver estado del pedido</a>
+
+<div class="divider"></div>
+
+<p style="font-size: 13px; color: #666; line-height: 1.6;">
+    Si necesitas factura electrónica o tienes alguna pregunta, contáctanos en info@gatewayit.com.co indicando tu número de pedido.
+</p>
+{% endblock %}

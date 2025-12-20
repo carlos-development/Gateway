@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Mis Compras - Gateway IT{% endblock %}
+
+{% block extra_css %}
+<style>
+    .orders-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .orders-header {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .orders-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .orders-header p {
+        font-size: 1rem;
+        color: var(--text-gray);
+    }
+
+    .orders-empty {
+        background-color: var(--light-card);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        text-align: center;
+        box-shadow: var(--shadow-card);
+    }
+
+    .orders-empty i {
+        font-size: 4rem;
+        color: var(--text-gray);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .orders-empty h2 {
+        font-size: 1.5rem;
+        color: var(--text-dark);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .orders-empty p {
+        color: var(--text-gray);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .order-card {
+        background-color: var(--light-card);
+        border-radius: 12px;
+        padding: var(--spacing-md);
+        box-shadow: var(--shadow-card);
+        transition: var(--transition-base);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-sm);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .order-number {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .order-date {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+    }
+
+    .order-card-body {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .order-info-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .order-info-label {
+        font-size: 0.85rem;
+        color: var(--text-gray);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+    }
+
+    .order-info-value {
+        font-size: 1rem;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    .order-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: var(--spacing-sm);
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge i {
+        margin-right: 6px;
+        font-size: 0.9rem;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-paid {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-processing {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-shipped {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .status-delivered {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 24px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: var(--transition-base);
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn i {
+        margin-right: 8px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(245, 134, 53, 0.3);
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+
+    .btn-outline:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .orders-container {
+            padding: var(--spacing-sm);
+        }
+
+        .orders-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .order-card {
+            padding: var(--spacing-sm);
+        }
+
+        .order-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+        }
+
+        .order-card-body {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-xs);
+        }
+
+        .order-card-footer {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            align-items: stretch;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Dark Mode Support */
+    body.dark-mode .order-card {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .order-card-header,
+    body.dark-mode .order-card-footer {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <div class="orders-header">
+        <h1>Mis Compras</h1>
+        <p>Revisa el estado de tus pedidos y su información</p>
+    </div>
+
+    {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-card-header">
+                    <div>
+                        <div class="order-number">Pedido #{{ order.order_number }}</div>
+                        <div class="order-date">{{ order.created_at|date:"d/m/Y H:i" }}</div>
+                    </div>
+                    <div>
+                        {% if order.status == 'PAID' %}
+                            <span class="status-badge status-paid">
+                                <i class="fas fa-check-circle"></i>
+                                Pagado
+                            </span>
+                        {% elif order.status == 'PROCESSING' %}
+                            <span class="status-badge status-processing">
+                                <i class="fas fa-spinner"></i>
+                                Procesando
+                            </span>
+                        {% elif order.status == 'SHIPPED' %}
+                            <span class="status-badge status-shipped">
+                                <i class="fas fa-truck"></i>
+                                Enviado
+                            </span>
+                        {% elif order.status == 'DELIVERED' %}
+                            <span class="status-badge status-delivered">
+                                <i class="fas fa-box-open"></i>
+                                Entregado
+                            </span>
+                        {% elif order.status == 'CANCELLED' %}
+                            <span class="status-badge status-cancelled">
+                                <i class="fas fa-times-circle"></i>
+                                Cancelado
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-pending">
+                                <i class="fas fa-clock"></i>
+                                Pendiente
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="order-card-body">
+                    <div class="order-info-item">
+                        <span class="order-info-label">Total</span>
+                        <span class="order-info-value">${{ order.total_amount|floatformat:0|intcomma }} COP</span>
+                    </div>
+                    <div class="order-info-item">
+                        <span class="order-info-label">Artículos</span>
+                        <span class="order-info-value">{{ order.items.count }} producto{{ order.items.count|pluralize }}</span>
+                    </div>
+                    {% if order.get_shipping_address %}
+                    <div class="order-info-item">
+                        <span class="order-info-label">Envío</span>
+                        <span class="order-info-value">{{ order.shipping_city }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="order-card-footer">
+                    <a href="{% url 'payments:order_detail' order.id %}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalle
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="orders-empty">
+            <i class="fas fa-shopping-bag"></i>
+            <h2>No tienes pedidos aún</h2>
+            <p>Cuando realices tu primera compra, aparecerá aquí</p>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                <i class="fas fa-store"></i>
+                Ver Productos
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
